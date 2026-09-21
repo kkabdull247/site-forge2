@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Siteforge — Professional Multi-Page Site & Asset Extractor</title>
+<meta name="description" content="Siteforge pulls a website's markup, stylesheets, scripts, icons, and images into a clean local project you can open, edit, or hand off.">
+<meta name="theme-color" content="#0b0f19">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+<style>
+/* =========================================================
+   TOKENS — macOS / iMac Professional Glassmorphism
+========================================================= */
+:root{
+  --bg-0:#090d16;
+  --bg-1:#101728;
+  --bg-2:#1a233a;
+
+  --glass-fill: rgba(255, 255, 255, 0.045);
+  --glass-fill-strong: rgba(255, 255, 255, 0.085);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-border-bright: rgba(255, 255, 255, 0.26);
+
+  --ink:#f5f7ff;
+  --ink-dim:#94a3b8;
+  --ink-faint:#64748b;
+
+  --cyan:#00d2ff;
+  --violet:#7928ca;
+  --magenta:#ff0080;
+  --amber:#f59e0b;
+  --danger:#ef4444;
+
+  --radius-lg:20px;
+  --radius-md:12px;
+  --radius-sm:8px;
+
+  --sans:"SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --mono:"JetBrains Mono", monospace;
+
+  --shadow-glass: 0 24px 50px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+:root[data-theme="light"]{
+  --bg-0:#f1f5f9;
+  --bg-1:#ffffff;
+  --bg-2:#e2e8f0;
+
+  --glass-fill: rgba(255, 255, 255, 0.6);
+  --glass-fill-strong: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-border-bright: rgba(0, 0, 0, 0.16);
+
+  --ink:#0f172a;
+  --ink-dim:#475569;
+  --ink-faint:#94a3b8;
+
+  --shadow-glass: 0 20px 40px rgba(15, 23, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  min-height:100vh;
+  background:var(--bg-0);
+  color:var(--ink);
+  font-family:var(--sans);
+  overflow-x:hidden;
+  position:relative;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* macOS iMac Ambient Desktop Aurora */
+.aurora{
+  position:fixed;
+  inset:0;
+  z-index:-2;
+  overflow:hidden;
+  background:radial-gradient(120% 120% at 50% -10%, var(--bg-1) 0%, var(--bg-0) 70%);
+}
+.aurora span{
+  position:absolute;
+  border-radius:50%;
+  filter:blur(120px);
+  opacity:.45;
+}
+.aurora .b1{width:600px;height:600px;background:#3b82f6;top:-200px;left:-100px;animation:drift1 25s ease-in-out infinite alternate;}
+.aurora .b2{width:550px;height:550px;background:#8b5cf6;bottom:-250px;right:-100px;animation:drift2 30s ease-in-out infinite alternate;}
+.aurora .b3{width:450px;height:450px;background:#ec4899;top:40%;left:50%;opacity:.25;animation:drift3 35s ease-in-out infinite alternate;}
+
+@keyframes drift1{from{transform:translate(0,0)}to{transform:translate(50px,40px)}}
+@keyframes drift2{from{transform:translate(0,0)}to{transform:translate(-50px,-40px)}}
+@keyframes drift3{from{transform:translate(0,0)}to{transform:translate(-40px,50px)}}
+
+a{color:inherit}
+img{max-width:100%;display:block}
+button{font:inherit;cursor:pointer}
+input,textarea,select{font:inherit}
+::selection{background:var(--cyan);color:#000}
+
+.glass{
+  background:var(--glass-fill);
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius-lg);
+  backdrop-filter:blur(36px) saturate(180%);
+  -webkit-backdrop-filter:blur(36px) saturate(180%);
+  box-shadow:var(--shadow-glass);
+}
+
+.wrap{width:min(1100px, calc(100% - 40px));margin-inline:auto}
+
+header{padding:28px 0 12px}
+.header-row{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:14px}
+.brand-mark{
+  width:44px;height:44px;
+  border-radius:12px;
+  display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--cyan),var(--violet));
+  color:#fff;
+  font-weight:700;
+  font-size:18px;
+  box-shadow: 0 10px 20px rgba(0,210,255,0.25);
+}
+.brand-text{font-weight:700;font-size:18px;letter-spacing:-.01em}
+.brand-text small{display:block;font-weight:400;font-size:11.5px;color:var(--ink-faint);letter-spacing:.02em}
+
+.theme-toggle{
+  width:42px;height:42px;
+  border-radius:12px;
+  border:1px solid var(--glass-border);
+  background:var(--glass-fill);
+  display:grid;place-items:center;
+  color:var(--ink-dim);
+  transition:.2s;
+}
+.theme-toggle:hover{border-color:var(--glass-border-bright);color:var(--ink)}
+.theme-toggle svg{width:18px;height:18px}
+
+.hero{padding:48px 0 32px}
+.hero h1{font-size:clamp(32px,4.8vw,52px);line-height:1.08;letter-spacing:-.03em;font-weight:700;max-width:700px}
+.hero h1 .grad{
+  background:linear-gradient(100deg,var(--cyan),var(--violet) 55%,var(--magenta));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero p{margin-top:16px;max-width:580px;color:var(--ink-dim);font-size:15.5px;line-height:1.65}
+.hero-facts{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.fact{padding:7px 14px;border-radius:999px;font-size:12px;color:var(--ink-dim);background:var(--glass-fill);border:1px solid var(--glass-border)}
+.fact b{color:var(--ink);font-weight:600}
+
+.tool{margin-top:10px;padding:10px;overflow:hidden}
+.tool-inner{padding:30px}
+@media(min-width:760px){.tool-inner{padding:40px}}
+
+.mode-switch{
+  display:inline-flex;gap:4px;padding:4px;
+  border-radius:999px;background:var(--glass-fill-strong);
+  border:1px solid var(--glass-border);margin-bottom:26px;
+}
+.mode-btn{
+  border:0;background:transparent;color:var(--ink-faint);
+  padding:9px 18px;border-radius:999px;font-size:13px;
+  font-weight:600;transition:.18s;white-space:nowrap;
+}
+.mode-btn.active{background:var(--ink);color:var(--bg-0);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+.mode-btn:not(.active):hover{color:var(--ink)}
+.mode-pane{display:none}
+.mode-pane.active{display:block}
+
+.field{margin-bottom:18px}
+.field label{display:block;font-size:12.5px;font-weight:600;color:var(--ink-dim);margin-bottom:8px}
+.field .hint{font-weight:400;color:var(--ink-faint)}
+
+.input, .textarea, .select{
+  width:100%;border-radius:var(--radius-md);
+  border:1px solid var(--glass-border);background:var(--glass-fill);
+  color:var(--ink);padding:14px 16px;outline:0;
+  transition:border-color .18s, background .18s;
+}
+.input::placeholder,.textarea::placeholder{color:var(--ink-faint)}
+.input:focus,.textarea:focus,.select:focus{border-color:var(--cyan);background:var(--glass-fill-strong)}
+.textarea{min-height:160px;resize:vertical;font-family:var(--mono);font-size:12.5px;line-height:1.7}
+
+.select{
+  appearance:none;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'><path d='m6 9 6 6 6-6'/></svg>");
+  background-repeat:no-repeat;background-position:right 14px center;background-size:16px;
+}
+.select option{background:var(--bg-1);color:var(--ink)}
+
+.dropzone{
+  border:1.5px dashed var(--glass-border-bright);border-radius:var(--radius-md);
+  padding:32px 20px;text-align:center;cursor:pointer;transition:.18s;
+}
+.dropzone:hover,.dropzone.drag{background:var(--glass-fill);border-color:var(--cyan)}
+.dropzone .dz-icon{
+  width:46px;height:46px;margin:0 auto 12px;border-radius:12px;
+  display:grid;place-items:center;background:var(--glass-fill-strong);color:var(--cyan);
+}
+.dz-title{font-weight:600;font-size:14px}
+.dz-copy{margin-top:4px;font-size:12px;color:var(--ink-faint)}
+.dz-filename{margin-top:8px;font-family:var(--mono);font-size:12px;color:var(--cyan)}
+
+.check-row{display:flex;align-items:center;gap:10px;margin:16px 0;font-size:13px;color:var(--ink-dim)}
+.check-row input{accent-color:var(--cyan);width:16px;height:16px;border-radius:4px}
+
+.primary-btn{
+  width:100%;border:0;border-radius:999px;padding:16px;
+  font-weight:600;font-size:14.5px;
+  background:linear-gradient(100deg,var(--cyan),var(--violet));
+  color:#fff;display:flex;align-items:center;justify-content:center;gap:9px;
+  box-shadow:0 12px 30px rgba(0,210,255,0.3);
+  transition:transform .15s, box-shadow .15s, opacity .15s;
+}
+.primary-btn:hover{transform:translateY(-2px);box-shadow:0 16px 36px rgba(0,210,255,0.45)}
+.primary-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.primary-btn svg{width:16px;height:16px}
+
+.disclaimer{margin-top:16px;font-size:12px;line-height:1.7;color:var(--ink-faint)}
+
+/* Log Terminal */
+.log-panel{margin-top:24px;overflow:hidden;display:none}
+.log-panel.show{display:block}
+.log-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--glass-border)}
+.log-dots span{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:6px}
+.d-red{background:var(--danger)}.d-amber{background:var(--amber)}.d-green{background:var(--cyan)}
+.log-status{font-family:var(--mono);font-size:11px;letter-spacing:.05em;color:var(--ink-faint)}
+.log-body{padding:16px 18px;height:190px;overflow-y:auto;font-family:var(--mono);font-size:12px;line-height:1.8}
+.log-body p{color:var(--ink-dim)}
+.log-ok{color:var(--cyan)!important}
+.log-warn{color:var(--amber)!important}
+.log-err{color:var(--danger)!important}
+
+.progress-track{height:3px;background:var(--glass-border);overflow:hidden}
+.progress-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--cyan),var(--violet));transition:width .25s ease}
+
+/* Results & Separate Download Actions */
+.results{margin-top:28px;display:none}
+.results.show{display:block}
+.results-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;margin-bottom:20px}
+.results-title{font-size:16px;font-weight:600}
+.results-sub{margin-top:3px;font-size:12px;color:var(--ink-faint)}
+
+.download-group{display:grid;grid-template-columns:repeat(auto-fit, minmax(160px, 1fr));gap:10px;margin-bottom:22px}
+.dl-btn{
+  border:1px solid var(--glass-border);background:var(--glass-fill);
+  color:var(--ink);padding:12px 16px;border-radius:var(--radius-md);font-size:12.5px;font-weight:600;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:.18s;text-align:center;
+}
+.dl-btn svg{width:15px;height:15px}
+.dl-btn:hover{border-color:var(--glass-border-bright);background:var(--glass-fill-strong)}
+.dl-btn.primary{background:var(--cyan);color:#090d16;border-color:transparent;box-shadow:0 8px 20px rgba(0,210,255,0.3)}
+.dl-btn:disabled{opacity:.4;cursor:not-allowed}
+
+.stat-strip{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:1px;
+  background:var(--glass-border);border:1px solid var(--glass-border);border-radius:var(--radius-md);overflow:hidden;margin-bottom:20px;
+}
+.stat{background:var(--glass-fill);padding:16px;text-align:center}
+.stat-num{font-size:22px;font-weight:700;font-family:var(--mono)}
+.stat-label{margin-top:4px;font-size:10px;color:var(--ink-faint);letter-spacing:.03em}
+
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;max-height:380px;overflow-y:auto;padding-right:4px}
+.g-card{border:1px solid var(--glass-border);background:var(--glass-fill);border-radius:var(--radius-sm);padding:8px;transition:.15s}
+.g-card img{width:100%;height:100px;object-fit:cover;border-radius:6px;background:var(--glass-fill-strong)}
+.g-card button{width:100%;margin-top:6px;border:0;background:transparent;color:var(--ink-dim);font-size:11px;padding:6px 0;border-radius:4px}
+.g-card button:hover{background:var(--glass-fill-strong);color:var(--ink)}
+
+footer{padding:28px 0 45px;border-top:1px solid var(--glass-border);font-size:12px;color:var(--ink-faint);text-align:center}
+.hidden{display:none !important}
+</style>
+</head>
+<body>
+
+<div class="aurora"><span class="b1"></span><span class="b2"></span><span class="b3"></span></div>
+
+<div class="wrap">
+  <header>
+    <div class="header-row">
+      <div class="brand">
+        <div class="brand-mark">SF</div>
+        <div class="brand-text">Siteforge<small>macOS Professional Edition</small></div>
+      </div>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41m12.02-12.02 1.41 1.41"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1>Clone full websites &amp; assets in <span class="grad">stunning Mac glass style.</span></h1>
+    <p>Crawl complete multi-page domains, pull stylesheets, scripts, icons, fonts, and images into clean, ready-to-open bundles.</p>
+    <div class="hero-facts">
+      <div class="fact"><b>Multi-page</b> recursive domain crawl</div>
+      <div class="fact">Dedicated <b>Icons &amp; Assets</b> folders</div>
+      <div class="fact">Independent export actions</div>
+    </div>
+  </section>
+
+  <section class="tool glass">
+    <div class="tool-inner">
+      <div class="mode-switch" role="tablist">
+        <button class="mode-btn active" data-mode="url" type="button">Clone from URL</button>
+        <button class="mode-btn" data-mode="paste" type="button">Paste HTML</button>
+        <button class="mode-btn" data-mode="file" type="button">Upload file</button>
+      </div>
+
+      <!-- URL MODE -->
+      <div class="mode-pane active" data-pane="url">
+        <div class="field">
+          <label for="urlInput">Target Domain or URL</label>
+          <input class="input" id="urlInput" type="url" placeholder="https://example.com" autocomplete="off">
+        </div>
+      </div>
+
+      <!-- PASTE MODE -->
+      <div class="mode-pane" data-pane="paste">
+        <div class="field">
+          <label for="baseUrlPaste">Site Base URL <span class="hint">— for relative link resolution</span></label>
+          <input class="input" id="baseUrlPaste" type="url" placeholder="https://example.com">
+        </div>
+        <div class="field">
+          <label for="pasteInput">HTML Source Code</label>
+          <textarea class="textarea" id="pasteInput" placeholder="Paste HTML markup here..."></textarea>
+        </div>
+      </div>
+
+      <!-- FILE MODE -->
+      <div class="mode-pane" data-pane="file">
+        <div class="field">
+          <label for="baseUrlFile">Site Base URL <span class="hint">— optional</span></label>
+          <input class="input" id="baseUrlFile" type="url" placeholder="https://example.com">
+        </div>
+        <input type="file" id="fileInput" accept=".html,.htm" class="hidden">
+        <label class="dropzone" id="dropzone" for="fileInput">
+          <div class="dz-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 0 0 4.56 21h14.88a2 2 0 0 0 1.939-1.515L22 17"/></svg>
+          </div>
+          <div class="dz-title">Drop an .html file, or click to browse</div>
+          <div class="dz-filename" id="fileNameLabel"></div>
+        </label>
+      </div>
+
+      <!-- ADVANCED OPTIONS -->
+      <div class="check-row">
+        <input type="checkbox" id="multiPageToggle" checked>
+        <label for="multiPageToggle">Crawl multiple pages across this domain (recursive link discovery)</label>
+      </div>
+
+      <div class="field" id="crawlLimitField">
+        <label for="maxPagesSelect">Maximum pages to crawl</label>
+        <select class="select" id="maxPagesSelect">
+  <option value="10" selected>Up to 10 pages</option>
+  <option value="25">Up to 25 pages</option>
+  <option value="50">Up to 50 pages</option>
+  <option value="100">Up to 100 pages</option>
+    <option value="500">Up to 500 pages</option>
+
+</select>
+        
+      </div>
+
+      <div class="field">
+        <label for="formatSelect">Image export format</label>
+        <select class="select" id="formatSelect">
+          <option value="original" selected>Keep original format</option>
+          <option value="png">Convert all to PNG</option>
+          <option value="jpg">Convert all to JPG</option>
+          <option value="webp">Convert all to WEBP</option>
+        </select>
+      </div>
+
+      <div class="check-row">
+        <input type="checkbox" id="hdToggle" checked>
+        <label for="hdToggle">Recover full-resolution images (strip resize parameters)</label>
+      </div>
+
+      <div class="check-row">
+        <input type="checkbox" id="proxyToggle" checked>
+        <label for="proxyToggle">Enable fallback CORS proxy (allorigins.win)</label>
+      </div>
+
+      <div class="check-row">
+        <input type="checkbox" id="fontsToggle" checked>
+        <label for="fontsToggle">Fetch fonts and background CSS assets</label>
+      </div>
+
+      <button class="primary-btn" id="runBtn" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <span id="runBtnLabel">Extract Full Project</span>
+      </button>
+
+      <!-- LOG TERMINAL -->
+      <div class="glass log-panel" id="logPanel">
+        <div class="log-head">
+          <div class="log-dots"><span class="d-red"></span><span class="d-amber"></span><span class="d-green"></span></div>
+          <div class="log-status" id="logStatus">IDLE</div>
+        </div>
+        <div class="log-body" id="logBody"></div>
+        <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+      </div>
+
+      <!-- RESULTS & INDEPENDENT DOWNLOAD BUTTONS -->
+      <div class="results" id="results">
+        <div class="results-head">
+          <div>
+            <div class="results-title">Extraction Complete</div>
+            <div class="results-sub" id="resultsSub">Select your preferred download option below.</div>
+          </div>
+        </div>
+
+        <div class="download-group">
+          <button class="dl-btn" id="dlImages" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            Images Only (.zip)
+          </button>
+          <button class="dl-btn" id="dlIcons" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m12 8-4 4 4 4m4-4H8"/></svg>
+            Icons Folder (.zip)
+          </button>
+          <button class="dl-btn" id="dlSite" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M4 9h16"/></svg>
+            Site Pages (.zip)
+          </button>
+          <button class="dl-btn primary" id="dlAll" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v13m0 0-5-5m5 5 5-5M4 19h16"/></svg>
+            Full Project Bundle
+          </button>
+        </div>
+
+        <div class="stat-strip">
+          <div class="stat"><div class="stat-num" id="statPages">1</div><div class="stat-label">PAGES</div></div>
+          <div class="stat"><div class="stat-num" id="statCss">0</div><div class="stat-label">STYLESHEETS</div></div>
+          <div class="stat"><div class="stat-num" id="statJs">0</div><div class="stat-label">SCRIPTS</div></div>
+          <div class="stat"><div class="stat-num" id="statImg">0</div><div class="stat-label">IMAGES</div></div>
+          <div class="stat"><div class="stat-num" id="statIcons">0</div><div class="stat-label">ICONS</div></div>
+        </div>
+
+        <div class="gallery" id="gallery"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    Siteforge — macOS Professional Edition • Runs entirely in your browser
+  </footer>
+</div>
+
+<script>
+let currentMode = "url";
+let uploadedFileText = null;
+let uploadedFileName = "";
+let lastResult = null;
+
+// Theme toggle
+const root = document.documentElement;
+document.getElementById("themeToggle").addEventListener("click", () => {
+  const isLight = root.getAttribute("data-theme") === "light";
+  root.setAttribute("data-theme", isLight ? "dark" : "light");
+});
+
+// Mode switching
+document.querySelectorAll(".mode-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".mode-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".mode-pane").forEach(p => p.classList.remove("active"));
+    btn.classList.add("active");
+    currentMode = btn.dataset.mode;
+    document.querySelector('.mode-pane[data-pane="'+currentMode+'"]').classList.add("active");
+  });
+});
+
+document.getElementById("multiPageToggle").addEventListener("change", (e) => {
+  document.getElementById("crawlLimitField").classList.toggle("hidden", !e.target.checked);
+});
+
+// File upload / drag-drop handlers
+const fileInput = document.getElementById("fileInput");
+const dropzone = document.getElementById("dropzone");
+const fileNameLabel = document.getElementById("fileNameLabel");
+
+fileInput.addEventListener("change", async (e) => {
+  const file = e.target.files[0];
+  if(!file) return;
+  uploadedFileName = file.name;
+  fileNameLabel.textContent = "Loaded: " + file.name;
+  uploadedFileText = await file.text();
+});
+
+dropzone.addEventListener("dragover", e => { e.preventDefault(); dropzone.classList.add("drag"); });
+dropzone.addEventListener("dragleave", () => dropzone.classList.remove("drag"));
+dropzone.addEventListener("drop", async e => {
+  e.preventDefault(); dropzone.classList.remove("drag");
+  const file = e.dataTransfer.files[0];
+  if(!file) return;
+  uploadedFileName = file.name;
+  fileNameLabel.textContent = "Loaded: " + file.name;
+  uploadedFileText = await file.text();
+});
+
+// Logger helpers
+const logPanel = document.getElementById("logPanel");
+const logBody = document.getElementById("logBody");
+const logStatus = document.getElementById("logStatus");
+const progressBar = document.getElementById("progressBar");
+
+function resetLog(){
+  logBody.innerHTML = "";
+  logPanel.classList.add("show");
+  progressBar.style.width = "0%";
+  logStatus.textContent = "RUNNING";
+}
+function log(text, cls){
+  const p = document.createElement("p");
+  if(cls) p.className = cls;
+  p.textContent = text;
+  logBody.appendChild(p);
+  logBody.scrollTop = logBody.scrollHeight;
+}
+function setProgress(n){ progressBar.style.width = n + "%"; }
+
+function normalizeUrl(v){
+  if(!v) return "";
+  if(!/^https?:\/\//i.test(v)) v = "https://" + v;
+  return new URL(v).href;
+}
+
+function safeExt(mimeOrPath, fallback){
+  let ext = fallback || "png";
+  if(mimeOrPath && mimeOrPath.includes("/")){
+    ext = mimeOrPath.split("/")[1].split(";")[0];
+  } else if(mimeOrPath && mimeOrPath.includes(".")){
+    ext = mimeOrPath.split(".").pop().split("?")[0];
+  }
+  if(ext === "jpeg") ext = "jpg";
+  return ext.replace(/[^a-z0-9]/gi,"").slice(0,5) || "png";
+}
+
+function convertToHdUrl(urlString){
+  try{
+    const url = new URL(urlString);
+    ["w","h","width","height","quality","fit","crop","resize","dpr","q"].forEach(p=>url.searchParams.delete(p));
+    url.pathname = url.pathname.replace(/-\d+x\d+(?=\.(jpg|jpeg|png|webp|gif|avif))/i,"");
+    return url.toString();
+  }catch(e){ return urlString; }
+}
+
+const PROXY_PREFIX = "https://api.allorigins.win/raw?url=";
+let useProxyFallback = true;
+
+async function smartFetch(url){
+  try{
+    const r = await fetch(url, { mode:"cors", redirect:"follow" });
+    if(r.ok) return { ok:true, response:r, viaProxy:false };
+  }catch(e){}
+  if(!useProxyFallback) return { ok:false, response:null, viaProxy:false };
+  try{
+    const r = await fetch(PROXY_PREFIX + encodeURIComponent(url));
+    if(r.ok) return { ok:true, response:r, viaProxy:true };
+  }catch(e){}
+  return { ok:false, response:null, viaProxy:true };
+}
+
+function triggerSave(blob, filename){
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1500);
+}
+
+function filenameFromUrl(url, fallbackBase, fallbackExt){
+  try{
+    const u = new URL(url);
+    let base = u.pathname.split("/").filter(Boolean).pop() || (fallbackBase + "." + fallbackExt);
+    base = base.split("?")[0].split("#")[0];
+    base = base.replace(/[^a-zA-Z0-9._-]/g, "_");
+    if(!base.includes(".")) base += "." + fallbackExt;
+    return base.slice(0,120);
+  }catch(e){
+    return fallbackBase + "." + fallbackExt;
+  }
+}
+
+function uniqueName(name, usedNames){
+  if(!usedNames.has(name)){ usedNames.add(name); return name; }
+  const dot = name.lastIndexOf(".");
+  const base = dot === -1 ? name : name.slice(0,dot);
+  const ext = dot === -1 ? "" : name.slice(dot);
+  let i = 2, candidate = base + "-" + i + ext;
+  while(usedNames.has(candidate)){ i++; candidate = base + "-" + i + ext; }
+  usedNames.add(candidate);
+  return candidate;
+}
+
+function convertImageBlob(blob, format){
+  return new Promise(resolve=>{
+    if(format === "original" || blob.type === "image/svg+xml" || blob.type === "image/gif"){
+      resolve({ blob, ext: safeExt(blob.type,"png") });
+      return;
+    }
+    const mimeMap = { png:"image/png", jpg:"image/jpeg", webp:"image/webp" };
+    const targetMime = mimeMap[format];
+    if(!targetMime){ resolve({ blob, ext: safeExt(blob.type,"png") }); return; }
+
+    const objectUrl = URL.createObjectURL(blob);
+    const im = new Image();
+    im.onload = () => {
+      try{
+        const canvas = document.createElement("canvas");
+        canvas.width = im.naturalWidth || 1;
+        canvas.height = im.naturalHeight || 1;
+        const ctx = canvas.getContext("2d");
+        if(format === "jpg"){ ctx.fillStyle = "#fff"; ctx.fillRect(0,0,canvas.width,canvas.height); }
+        ctx.drawImage(im,0,0);
+        canvas.toBlob(newBlob=>{
+          URL.revokeObjectURL(objectUrl);
+          if(newBlob) resolve({ blob:newBlob, ext:format });
+          else resolve({ blob, ext: safeExt(blob.type,"png") });
+        }, targetMime, 0.92);
+      }catch(e){
+        URL.revokeObjectURL(objectUrl);
+        resolve({ blob, ext: safeExt(blob.type,"png") });
+      }
+    };
+    im.onerror = () => { URL.revokeObjectURL(objectUrl); resolve({ blob, ext: safeExt(blob.type,"png") }); };
+    im.src = objectUrl;
+  });
+}
+
+function discoverAssets(doc, baseUrl){
+  const cssItems = [];
+  const jsItems = [];
+  const images = new Set();
+  const icons = new Set();
+  const base64Images = new Set();
+
+  doc.querySelectorAll('link[rel="stylesheet"][href]').forEach(el=>{
+    try{ cssItems.push({ url:new URL(el.getAttribute("href"), baseUrl || location.href).href, el }); }catch(e){}
+  });
+
+  doc.querySelectorAll("script[src]").forEach(el=>{
+    try{ jsItems.push({ url:new URL(el.getAttribute("src"), baseUrl || location.href).href, el }); }catch(e){}
+  });
+
+  doc.querySelectorAll("img").forEach(el=>{
+    ["src","data-src","data-full-src","data-original"].forEach(attr=>{
+      const raw = el.getAttribute(attr);
+      if(!raw) return;
+      if(raw.startsWith("data:image/")){
+        if(raw.length > 50) base64Images.add(raw.replace(/\s+/g,""));
+        return;
+      }
+      try{
+        let resolved = raw.startsWith("//") ? "https:" + raw : new URL(raw, baseUrl || location.href).href;
+        images.add(resolved);
+      }catch(e){}
+    });
+  });
+
+  doc.querySelectorAll('link[rel*="icon"], link[rel*="apple-touch-icon"]').forEach(el=>{
+    const href = el.getAttribute("href");
+    if(!href) return;
+    try{
+      let resolved = href.startsWith("//") ? "https:" + href : new URL(href, baseUrl || location.href).href;
+      icons.add(resolved);
+    }catch(e){}
+  });
+
+  return { cssItems, jsItems, images:[...images], icons:[...icons], base64Images:[...base64Images] };
+}
+
+const FONT_EXT_RE = /\.(woff2?|ttf|otf|eot)(\?|#|$)/i;
+async function extractCssAssets(cssText, cssFileUrl, usedNames){
+  const urlRe = /url\(\s*(['"]?)([^'")]+)\1\s*\)/g;
+  const found = new Map();
+  let match;
+  const matches = [];
+  while((match = urlRe.exec(cssText)) !== null){
+    const raw = match[2].trim();
+    if(!raw || raw.startsWith("data:")) continue;
+    matches.push(raw);
+  }
+
+  for(const raw of matches){
+    let absolute;
+    try{ absolute = raw.startsWith("//") ? "https:"+raw : new URL(raw, cssFileUrl).href; }
+    catch(e){ continue; }
+    if(found.has(absolute)) continue;
+
+    const isFont = FONT_EXT_RE.test(absolute);
+    const isImg = /\.(png|jpe?g|gif|webp|svg|avif)(\?|#|$)/i.test(absolute);
+    if(!isFont && !isImg) continue;
+
+    const { ok, response } = await smartFetch(absolute);
+    if(!ok) continue;
+    const blob = await response.blob();
+    const kind = isFont ? "fonts" : "css-assets";
+    const name = uniqueName(filenameFromUrl(absolute, kind, isFont ? "woff2" : "png"), usedNames);
+    found.set(absolute, { localPath: kind + "/" + name, blob, kind, name });
+  }
+
+  let updatedText = cssText;
+  found.forEach((info, absolute)=>{
+    updatedText = updatedText.split(absolute).join("../" + info.localPath);
+  });
+
+  return { updatedText, assets:[...found.values()] };
+}
+
+function findChunkReferences(jsText, scriptUrl){
+  const re = /["'](\.{1,2}\/[^"'<>\s]{1,140}?\.(?:js|mjs|css)|\/[^"'<>\s]{3,140}?\.(?:js|mjs|css))["']/g;
+  const found = new Set();
+  let m;
+  while((m = re.exec(jsText)) !== null){
+    try{ found.add(new URL(m[1], scriptUrl).href); }catch(e){}
+  }
+  return [...found];
+}
+
+/* =========================================================
+   MAIN PIPELINE WITH PRECISE MULTI-PAGE CRAWLING
+========================================================= */
+
+async function runPipeline(){
+  const runBtn = document.getElementById("runBtn");
+  const hdToggle = document.getElementById("hdToggle").checked;
+  useProxyFallback = document.getElementById("proxyToggle").checked;
+  const multiPage = document.getElementById("multiPageToggle").checked;
+  const maxPages = parseInt(document.getElementById("maxPagesSelect").value, 10);
+  const fetchFontsToggle = document.getElementById("fontsToggle").checked;
+  const exportFormat = document.getElementById("formatSelect").value;
+
+  let startUrl = "";
+  let rawHtml = "";
+
+  if(currentMode === "url"){
+    const val = document.getElementById("urlInput").value.trim();
+    if(!val){ alert("Enter a valid URL first."); return; }
+    try{ startUrl = normalizeUrl(val); }catch(e){ alert("Invalid URL format."); return; }
+  } else if(currentMode === "paste"){
+    rawHtml = document.getElementById("pasteInput").value;
+    const bv = document.getElementById("baseUrlPaste").value.trim();
+    if(!rawHtml.trim()){ alert("Paste HTML source first."); return; }
+    if(bv){ try{ startUrl = normalizeUrl(bv); }catch(e){} }
+  } else if(currentMode === "file"){
+    if(!uploadedFileText){ alert("Select an HTML file first."); return; }
+    rawHtml = uploadedFileText;
+    const bv = document.getElementById("baseUrlFile").value.trim();
+    if(bv){ try{ startUrl = normalizeUrl(bv); }catch(e){} }
+  }
+
+  runBtn.disabled = true;
+  document.getElementById("runBtnLabel").textContent = "Processing Site...";
+  document.getElementById("results").classList.remove("show");
+  resetLog();
+  setProgress(10);
+
+  let pagesQueueData = []; // Holds { filename, url } to fetch
+  const visitedUrls = new Set();
+  const domainHost = startUrl ? new URL(startUrl).hostname : "";
+
+  // 1. Setup Root Page (index.html)
+  if(currentMode === "url"){
+    visitedUrls.add(startUrl);
+    pagesQueueData.push({ filename: "index.html", url: startUrl });
+  } else {
+    pagesQueueData.push({ filename: "index.html", url: startUrl || "index.html" });
+  }
+
+  setProgress(20);
+
+  // 2. Discover sub-pages first from index.html if URL mode is active
+  if(multiPage && startUrl && currentMode === "url"){
+    log("Scanning root page for internal links...");
+    const res = await smartFetch(startUrl);
+    if(res.ok){
+      const rootText = await res.response.text();
+      const rootDoc = new DOMParser().parseFromString(rootText, "text/html");
+      
+      rootDoc.querySelectorAll("a[href]").forEach(a => {
+        try{
+          let absLink = new URL(a.getAttribute("href"), startUrl).href;
+          let linkObj = new URL(absLink);
+          
+          if(linkObj.hostname === domainHost && !visitedUrls.has(absLink) && !absLink.includes("#") && !absLink.match(/\.(pdf|zip|png|jpg|jpeg|webp)$/i)){
+            if(pagesQueueData.length < maxPages){
+              visitedUrls.add(absLink);
+              let pathName = linkObj.pathname.replace(/^\/|\/$/g, "");
+              if(!pathName) return; // already index.html
+              
+              if(!pathName.endsWith(".html")) {
+                pathName = pathName.replace(/[^a-zA-Z0-9]/g, "-") + ".html";
+              }
+              pagesQueueData.push({ filename: pathName, url: absLink });
+              log("Queued sub-page: " + pathName + " (" + absLink + ")", "log-ok");
+            }
+          }
+        }catch(e){}
+      });
+    }
+  }
+
+  setProgress(40);
+  log("Fetching " + pagesQueueData.length + " page(s) and their respective assets...");
+
+  const allImagesSet = new Set();
+  const allIconsSet = new Set();
+  const base64ImagesSet = new Set();
+  let totalCssCount = 0;
+  let totalJsCount = 0;
+  
+  const processedPages = [];
+  const usedNames = new Set(["index.html","README.txt"]);
+  const fontAndCssAssets = [];
+
+  // 3. Fetch and process each page distinctly
+  for(let pageInfo of pagesQueueData){
+    log("Fetching page: " + pageInfo.filename);
+    let pageHtml = "";
+    
+    if(currentMode === "url" && pageInfo.url !== startUrl){
+      const subRes = await smartFetch(pageInfo.url);
+      if(subRes.ok){
+        pageHtml = await subRes.response.text();
+      } else {
+        log("Could not fetch " + pageInfo.url, "log-warn");
+        continue;
+      }
+    } else {
+      pageHtml = rawHtml;
+    }
+
+    const doc = new DOMParser().parseFromString(pageHtml, "text/html");
+    const pageBase = pageInfo.url || startUrl || location.href;
+    const discovered = discoverAssets(doc, pageBase);
+
+    totalCssCount += discovered.cssItems.length;
+    totalJsCount += discovered.jsItems.length;
+    discovered.images.forEach(i => allImagesSet.add(hdToggle ? convertToHdUrl(i) : i));
+    discovered.icons.forEach(i => allIconsSet.add(i));
+    discovered.base64Images.forEach(b => base64ImagesSet.add(b));
+
+    // Inline CSS
+    for(const item of discovered.cssItems.slice(0,30)){
+      const { ok, response } = await smartFetch(item.url);
+      if(ok){
+        let text = await response.text();
+        if(fetchFontsToggle){
+          const { updatedText, assets } = await extractCssAssets(text, item.url, usedNames);
+          text = updatedText;
+          fontAndCssAssets.push(...assets);
+        }
+        const styleEl = doc.createElement("style");
+        styleEl.textContent = text.replace(/<\/(style)/gi, "<\\/$1");
+        item.el.replaceWith(styleEl);
+      }
+    }
+
+    // Inline JS & Chunks
+    for(const item of discovered.jsItems.slice(0,30)){
+      const { ok, response } = await smartFetch(item.url);
+      if(ok){
+        const text = await response.text();
+        const scriptEl = doc.createElement("script");
+        if(item.el.getAttribute("type") === "module") scriptEl.setAttribute("type","module");
+        scriptEl.textContent = text.replace(/<\/(script)/gi, "<\\/$1");
+        item.el.replaceWith(scriptEl);
+
+        const chunkUrls = findChunkReferences(text, item.url);
+        for(const chunkUrl of chunkUrls.slice(0,6)){
+          const chunkRes = await smartFetch(chunkUrl);
+          if(chunkRes.ok){
+            const chunkText = await chunkRes.response.text();
+            const isCss = /\.css(\?|$)/i.test(chunkUrl);
+            const chunkEl = doc.createElement(isCss ? "style" : "script");
+            chunkEl.textContent = chunkText.replace(/<\/(style|script)/gi, "<\\/$1");
+            scriptEl.after(chunkEl);
+          }
+        }
+      }
+    }
+
+    processedPages.push({ filename: pageInfo.filename, html: "<!DOCTYPE html>\n" + doc.documentElement.outerHTML });
+  }
+
+  setProgress(75);
+  log("Downloading images and icons...");
+
+  // Fetch Images
+  const images = [];
+  const imgUsedNames = new Set();
+  let imgIdx = 0;
+  for(const url of allImagesSet){
+    imgIdx++;
+    const { ok, response } = await smartFetch(url);
+    if(ok){
+      const rawBlob = await response.blob();
+      const { blob, ext } = await convertImageBlob(rawBlob, exportFormat);
+      const name = uniqueName(filenameFromUrl(url, "image_" + imgIdx, ext), imgUsedNames);
+      images.push({ name, blob, previewUrl: URL.createObjectURL(blob) });
+    }
+  }
+
+  // Fetch Icons
+  const icons = [];
+  const iconUsedNames = new Set();
+  let iconIdx = 0;
+  for(const url of allIconsSet){
+    iconIdx++;
+    const { ok, response } = await smartFetch(url);
+    if(ok){
+      const blob = await response.blob();
+      const ext = safeExt(blob.type, "ico");
+      const name = uniqueName(filenameFromUrl(url, "icon_" + iconIdx, ext), iconUsedNames);
+      icons.push({ name, blob });
+    }
+  }
+
+  const readme = "SITEFORGE PROJECT BUNDLE\n==========================\nSource: " + (startUrl || uploadedFileName) + "\nGenerated: " + new Date().toISOString() + "\n";
+
+  lastResult = {
+    pages: processedPages,
+    fontAndCssAssets,
+    readme,
+    images,
+    icons
+  };
+
+  document.getElementById("statPages").textContent = processedPages.length;
+  document.getElementById("statCss").textContent = totalCssCount;
+  document.getElementById("statJs").textContent = totalJsCount;
+  document.getElementById("statImg").textContent = images.length;
+  document.getElementById("statIcons").textContent = icons.length;
+
+  renderGallery(images);
+
+  setProgress(100);
+  logStatus.textContent = "DONE";
+  log("Extraction complete successfully!", "log-ok");
+  document.getElementById("results").classList.add("show");
+
+  runBtn.disabled = false;
+  document.getElementById("runBtnLabel").textContent = "Extract Full Project";
+}
+
+function renderGallery(images){
+  const gallery = document.getElementById("gallery");
+  gallery.innerHTML = "";
+  images.slice(0, 16).forEach(img=>{
+    const card = document.createElement("div");
+    card.className = "g-card";
+    const im = document.createElement("img");
+    im.src = img.previewUrl;
+    im.loading = "lazy";
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = "Download";
+    btn.addEventListener("click", ()=> triggerSave(img.blob, img.name));
+    card.appendChild(im);
+    card.appendChild(btn);
+    gallery.appendChild(card);
+  });
+}
+
+/* =========================================================
+   ZIP EXPORT HANDLERS
+========================================================= */
+
+async function buildZip(includePages, includeImages, includeIcons){
+  if(!lastResult) return null;
+  const zip = new JSZip();
+
+  if(includePages){
+    lastResult.pages.forEach(p => zip.file(p.filename, p.html));
+    zip.file("README.txt", lastResult.readme);
+    if(lastResult.fontAndCssAssets.length){
+      lastResult.fontAndCssAssets.forEach(a => zip.folder("assets/" + a.kind).file(a.name, a.blob));
+    }
+  }
+  if(includeImages && lastResult.images.length){
+    const folder = includePages ? zip.folder("assets/images") : zip.folder("images");
+    lastResult.images.forEach(img => folder.file(img.name, img.blob));
+  }
+  if(includeIcons && lastResult.icons.length){
+    const folder = includePages ? zip.folder("assets/icons") : zip.folder("icons");
+    lastResult.icons.forEach(icon => folder.file(icon.name, icon.blob));
+  }
+  return await zip.generateAsync({ type:"blob", compression:"DEFLATE" });
+}
+
+document.getElementById("dlImages").addEventListener("click", async ()=>{
+  if(!lastResult || !lastResult.images.length){ alert("No images found."); return; }
+  const blob = await buildZip(false, true, false);
+  triggerSave(blob, "siteforge-images.zip");
+});
+
+document.getElementById("dlIcons").addEventListener("click", async ()=>{
+  if(!lastResult || !lastResult.icons.length){ alert("No icons found."); return; }
+  const blob = await buildZip(false, false, true);
+  triggerSave(blob, "siteforge-icons.zip");
+});
+
+document.getElementById("dlSite").addEventListener("click", async ()=>{
+  if(!lastResult){ alert("Run extraction first."); return; }
+  const blob = await buildZip(true, false, false);
+  triggerSave(blob, "siteforge-pages.zip");
+});
+
+document.getElementById("dlAll").addEventListener("click", async ()=>{
+  if(!lastResult){ alert("Run extraction first."); return; }
+  const blob = await buildZip(true, true, true);
+  triggerSave(blob, "siteforge-full-project.zip");
+});
+
+document.getElementById("runBtn").addEventListener("click", runPipeline);
+</script>
+</body>
+</html>
