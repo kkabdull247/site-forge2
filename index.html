@@ -2,30 +2,27 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Siteforge — Professional Multi-Page Site & Asset Extractor</title>
-<meta name="description" content="Siteforge pulls a website's markup, stylesheets, scripts, icons, and images into a clean local project you can open, edit, or hand off.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Siteforge — Multi-Page Site & Asset Extractor</title>
+<meta name="description" content="Siteforge pulls a website's markup, stylesheets, scripts, fonts, icons, documents, and images into a clean local project you can open, edit, or hand off.">
 <meta name="theme-color" content="#0b0f19">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
 <style>
-/* =========================================================
-   TOKENS — macOS / iMac Professional Glassmorphism
-========================================================= */
 :root{
   --bg-0:#090d16;
   --bg-1:#101728;
   --bg-2:#1a233a;
 
-  --glass-fill: rgba(255, 255, 255, 0.045);
-  --glass-fill-strong: rgba(255, 255, 255, 0.085);
-  --glass-border: rgba(255, 255, 255, 0.12);
-  --glass-border-bright: rgba(255, 255, 255, 0.26);
+  --glass-fill: rgba(255,255,255,.055);
+  --glass-fill-strong: rgba(255,255,255,.10);
+  --glass-border: rgba(255,255,255,.13);
+  --glass-border-bright: rgba(255,255,255,.28);
 
   --ink:#f5f7ff;
   --ink-dim:#94a3b8;
@@ -37,66 +34,42 @@
   --amber:#f59e0b;
   --danger:#ef4444;
 
-  --radius-lg:20px;
-  --radius-md:12px;
-  --radius-sm:8px;
+  --radius-lg:26px;
+  --radius-md:16px;
+  --radius-sm:10px;
 
-  --sans:"SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --mono:"JetBrains Mono", monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","Inter","Segoe UI",Roboto,sans-serif;
+  --mono:"JetBrains Mono",monospace;
 
-  --shadow-glass: 0 24px 50px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  --shadow-glass: 0 24px 60px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.12);
 }
-
 :root[data-theme="light"]{
-  --bg-0:#f1f5f9;
+  --bg-0:#eef1f8;
   --bg-1:#ffffff;
   --bg-2:#e2e8f0;
-
-  --glass-fill: rgba(255, 255, 255, 0.6);
-  --glass-fill-strong: rgba(255, 255, 255, 0.85);
-  --glass-border: rgba(0, 0, 0, 0.08);
-  --glass-border-bright: rgba(0, 0, 0, 0.16);
-
+  --glass-fill: rgba(255,255,255,.6);
+  --glass-fill-strong: rgba(255,255,255,.85);
+  --glass-border: rgba(0,0,0,.08);
+  --glass-border-bright: rgba(0,0,0,.16);
   --ink:#0f172a;
   --ink-dim:#475569;
   --ink-faint:#94a3b8;
-
-  --shadow-glass: 0 20px 40px rgba(15, 23, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  --shadow-glass: 0 20px 40px rgba(15,23,42,.08), inset 0 1px 0 rgba(255,255,255,.8);
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{
-  min-height:100vh;
-  background:var(--bg-0);
-  color:var(--ink);
-  font-family:var(--sans);
-  overflow-x:hidden;
-  position:relative;
-  -webkit-font-smoothing: antialiased;
-}
+body{min-height:100vh;background:var(--bg-0);color:var(--ink);font-family:var(--sans);overflow-x:hidden;position:relative;-webkit-font-smoothing:antialiased}
 
-/* macOS iMac Ambient Desktop Aurora */
-.aurora{
-  position:fixed;
-  inset:0;
-  z-index:-2;
-  overflow:hidden;
-  background:radial-gradient(120% 120% at 50% -10%, var(--bg-1) 0%, var(--bg-0) 70%);
-}
-.aurora span{
-  position:absolute;
-  border-radius:50%;
-  filter:blur(120px);
-  opacity:.45;
-}
-.aurora .b1{width:600px;height:600px;background:#3b82f6;top:-200px;left:-100px;animation:drift1 25s ease-in-out infinite alternate;}
-.aurora .b2{width:550px;height:550px;background:#8b5cf6;bottom:-250px;right:-100px;animation:drift2 30s ease-in-out infinite alternate;}
-.aurora .b3{width:450px;height:450px;background:#ec4899;top:40%;left:50%;opacity:.25;animation:drift3 35s ease-in-out infinite alternate;}
-
+.aurora{position:fixed;inset:0;z-index:-2;overflow:hidden;background:radial-gradient(120% 120% at 50% -10%, var(--bg-1) 0%, var(--bg-0) 70%)}
+.aurora span{position:absolute;border-radius:50%;filter:blur(120px);opacity:.45}
+.aurora .b1{width:600px;height:600px;background:#3b82f6;top:-200px;left:-100px;animation:drift1 25s ease-in-out infinite alternate}
+.aurora .b2{width:550px;height:550px;background:#8b5cf6;bottom:-250px;right:-100px;animation:drift2 30s ease-in-out infinite alternate}
+.aurora .b3{width:450px;height:450px;background:#ec4899;top:40%;left:50%;opacity:.25;animation:drift3 35s ease-in-out infinite alternate}
 @keyframes drift1{from{transform:translate(0,0)}to{transform:translate(50px,40px)}}
 @keyframes drift2{from{transform:translate(0,0)}to{transform:translate(-50px,-40px)}}
 @keyframes drift3{from{transform:translate(0,0)}to{transform:translate(-40px,50px)}}
+@media (prefers-reduced-motion: reduce){.aurora span{animation:none}}
 
 a{color:inherit}
 img{max-width:100%;display:block}
@@ -104,176 +77,114 @@ button{font:inherit;cursor:pointer}
 input,textarea,select{font:inherit}
 ::selection{background:var(--cyan);color:#000}
 
-.glass{
-  background:var(--glass-fill);
-  border:1px solid var(--glass-border);
-  border-radius:var(--radius-lg);
-  backdrop-filter:blur(36px) saturate(180%);
-  -webkit-backdrop-filter:blur(36px) saturate(180%);
-  box-shadow:var(--shadow-glass);
-}
+.glass{background:var(--glass-fill);border:1px solid var(--glass-border);border-radius:var(--radius-lg);backdrop-filter:blur(36px) saturate(180%);-webkit-backdrop-filter:blur(36px) saturate(180%);box-shadow:var(--shadow-glass)}
 
 .wrap{width:min(1100px, calc(100% - 40px));margin-inline:auto}
 
 header{padding:28px 0 12px}
 .header-row{display:flex;align-items:center;justify-content:space-between;gap:16px}
 .brand{display:flex;align-items:center;gap:14px}
-.brand-mark{
-  width:44px;height:44px;
-  border-radius:12px;
-  display:grid;place-items:center;
-  background:linear-gradient(135deg,var(--cyan),var(--violet));
-  color:#fff;
-  font-weight:700;
-  font-size:18px;
-  box-shadow: 0 10px 20px rgba(0,210,255,0.25);
-}
+.brand-mark{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,var(--cyan),var(--violet));color:#fff;font-weight:700;font-size:18px;box-shadow:0 10px 20px rgba(0,210,255,.25)}
 .brand-text{font-weight:700;font-size:18px;letter-spacing:-.01em}
 .brand-text small{display:block;font-weight:400;font-size:11.5px;color:var(--ink-faint);letter-spacing:.02em}
-
-.theme-toggle{
-  width:42px;height:42px;
-  border-radius:12px;
-  border:1px solid var(--glass-border);
-  background:var(--glass-fill);
-  display:grid;place-items:center;
-  color:var(--ink-dim);
-  transition:.2s;
-}
+.theme-toggle{width:42px;height:42px;border-radius:14px;border:1px solid var(--glass-border);background:var(--glass-fill);display:grid;place-items:center;color:var(--ink-dim);transition:.2s}
 .theme-toggle:hover{border-color:var(--glass-border-bright);color:var(--ink)}
 .theme-toggle svg{width:18px;height:18px}
 
 .hero{padding:48px 0 32px}
-.hero h1{font-size:clamp(32px,4.8vw,52px);line-height:1.08;letter-spacing:-.03em;font-weight:700;max-width:700px}
-.hero h1 .grad{
-  background:linear-gradient(100deg,var(--cyan),var(--violet) 55%,var(--magenta));
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-}
-.hero p{margin-top:16px;max-width:580px;color:var(--ink-dim);font-size:15.5px;line-height:1.65}
+.hero h1{font-size:clamp(30px,4.6vw,50px);line-height:1.08;letter-spacing:-.03em;font-weight:800;max-width:700px}
+.hero h1 .grad{background:linear-gradient(100deg,var(--cyan),var(--violet) 55%,var(--magenta));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin-top:16px;max-width:580px;color:var(--ink-dim);font-size:15px;line-height:1.65}
 .hero-facts{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
 .fact{padding:7px 14px;border-radius:999px;font-size:12px;color:var(--ink-dim);background:var(--glass-fill);border:1px solid var(--glass-border)}
 .fact b{color:var(--ink);font-weight:600}
 
 .tool{margin-top:10px;padding:10px;overflow:hidden}
-.tool-inner{padding:30px}
-@media(min-width:760px){.tool-inner{padding:40px}}
+.tool-inner{padding:26px}
+@media(min-width:760px){.tool-inner{padding:38px}}
 
-.mode-switch{
-  display:inline-flex;gap:4px;padding:4px;
-  border-radius:999px;background:var(--glass-fill-strong);
-  border:1px solid var(--glass-border);margin-bottom:26px;
-}
-.mode-btn{
-  border:0;background:transparent;color:var(--ink-faint);
-  padding:9px 18px;border-radius:999px;font-size:13px;
-  font-weight:600;transition:.18s;white-space:nowrap;
-}
-.mode-btn.active{background:var(--ink);color:var(--bg-0);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+.mode-switch{display:inline-flex;gap:4px;padding:4px;border-radius:999px;background:var(--glass-fill-strong);border:1px solid var(--glass-border);margin-bottom:24px}
+.mode-btn{border:0;background:transparent;color:var(--ink-faint);padding:9px 18px;border-radius:999px;font-size:13px;font-weight:600;transition:.18s;white-space:nowrap}
+.mode-btn.active{background:var(--ink);color:var(--bg-0);box-shadow:0 4px 12px rgba(0,0,0,.15)}
 .mode-btn:not(.active):hover{color:var(--ink)}
 .mode-pane{display:none}
 .mode-pane.active{display:block}
 
-.field{margin-bottom:18px}
+.field{margin-bottom:16px}
 .field label{display:block;font-size:12.5px;font-weight:600;color:var(--ink-dim);margin-bottom:8px}
 .field .hint{font-weight:400;color:var(--ink-faint)}
 
-.input, .textarea, .select{
-  width:100%;border-radius:var(--radius-md);
-  border:1px solid var(--glass-border);background:var(--glass-fill);
-  color:var(--ink);padding:14px 16px;outline:0;
-  transition:border-color .18s, background .18s;
-}
+.input,.textarea,.select{width:100%;border-radius:var(--radius-md);border:1px solid var(--glass-border);background:var(--glass-fill);color:var(--ink);padding:14px 16px;outline:0;transition:border-color .18s,background .18s}
 .input::placeholder,.textarea::placeholder{color:var(--ink-faint)}
 .input:focus,.textarea:focus,.select:focus{border-color:var(--cyan);background:var(--glass-fill-strong)}
-.textarea{min-height:160px;resize:vertical;font-family:var(--mono);font-size:12.5px;line-height:1.7}
-
-.select{
-  appearance:none;-webkit-appearance:none;
-  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'><path d='m6 9 6 6 6-6'/></svg>");
-  background-repeat:no-repeat;background-position:right 14px center;background-size:16px;
-}
+.textarea{min-height:150px;resize:vertical;font-family:var(--mono);font-size:12.5px;line-height:1.7}
+.select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'><path d='m6 9 6 6 6-6'/></svg>");background-repeat:no-repeat;background-position:right 14px center;background-size:16px}
 .select option{background:var(--bg-1);color:var(--ink)}
 
-.dropzone{
-  border:1.5px dashed var(--glass-border-bright);border-radius:var(--radius-md);
-  padding:32px 20px;text-align:center;cursor:pointer;transition:.18s;
-}
+.dropzone{border:1.5px dashed var(--glass-border-bright);border-radius:var(--radius-md);padding:30px 20px;text-align:center;cursor:pointer;transition:.18s}
 .dropzone:hover,.dropzone.drag{background:var(--glass-fill);border-color:var(--cyan)}
-.dropzone .dz-icon{
-  width:46px;height:46px;margin:0 auto 12px;border-radius:12px;
-  display:grid;place-items:center;background:var(--glass-fill-strong);color:var(--cyan);
-}
+.dropzone .dz-icon{width:46px;height:46px;margin:0 auto 12px;border-radius:14px;display:grid;place-items:center;background:var(--glass-fill-strong);color:var(--cyan)}
 .dz-title{font-weight:600;font-size:14px}
 .dz-copy{margin-top:4px;font-size:12px;color:var(--ink-faint)}
 .dz-filename{margin-top:8px;font-family:var(--mono);font-size:12px;color:var(--cyan)}
 
-.check-row{display:flex;align-items:center;gap:10px;margin:16px 0;font-size:13px;color:var(--ink-dim)}
-.check-row input{accent-color:var(--cyan);width:16px;height:16px;border-radius:4px}
+.check-row{display:flex;align-items:flex-start;gap:10px;margin:14px 0;font-size:12.5px;color:var(--ink-dim);line-height:1.5}
+.check-row input{accent-color:var(--cyan);width:16px;height:16px;border-radius:4px;margin-top:2px;flex:0 0 auto}
 
-.primary-btn{
-  width:100%;border:0;border-radius:999px;padding:16px;
-  font-weight:600;font-size:14.5px;
-  background:linear-gradient(100deg,var(--cyan),var(--violet));
-  color:#fff;display:flex;align-items:center;justify-content:center;gap:9px;
-  box-shadow:0 12px 30px rgba(0,210,255,0.3);
-  transition:transform .15s, box-shadow .15s, opacity .15s;
-}
-.primary-btn:hover{transform:translateY(-2px);box-shadow:0 16px 36px rgba(0,210,255,0.45)}
+.primary-btn{width:100%;border:0;border-radius:999px;padding:16px;font-weight:700;font-size:14.5px;background:linear-gradient(100deg,var(--cyan),var(--violet));color:#fff;display:flex;align-items:center;justify-content:center;gap:9px;box-shadow:0 12px 30px rgba(0,210,255,.3);transition:transform .15s,box-shadow .15s,opacity .15s;margin-top:8px}
+.primary-btn:hover{transform:translateY(-2px);box-shadow:0 16px 36px rgba(0,210,255,.45)}
 .primary-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
 .primary-btn svg{width:16px;height:16px}
 
-.disclaimer{margin-top:16px;font-size:12px;line-height:1.7;color:var(--ink-faint)}
+.disclaimer{margin-top:16px;font-size:11.5px;line-height:1.7;color:var(--ink-faint)}
 
-/* Log Terminal */
-.log-panel{margin-top:24px;overflow:hidden;display:none}
+.log-panel{margin-top:22px;overflow:hidden;display:none}
 .log-panel.show{display:block}
 .log-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--glass-border)}
 .log-dots span{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:6px}
 .d-red{background:var(--danger)}.d-amber{background:var(--amber)}.d-green{background:var(--cyan)}
 .log-status{font-family:var(--mono);font-size:11px;letter-spacing:.05em;color:var(--ink-faint)}
-.log-body{padding:16px 18px;height:190px;overflow-y:auto;font-family:var(--mono);font-size:12px;line-height:1.8}
+.log-body{padding:16px 18px;height:190px;overflow-y:auto;font-family:var(--mono);font-size:11.5px;line-height:1.8}
 .log-body p{color:var(--ink-dim)}
 .log-ok{color:var(--cyan)!important}
 .log-warn{color:var(--amber)!important}
 .log-err{color:var(--danger)!important}
-
 .progress-track{height:3px;background:var(--glass-border);overflow:hidden}
 .progress-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--cyan),var(--violet));transition:width .25s ease}
 
-/* Results & Separate Download Actions */
-.results{margin-top:28px;display:none}
+.results{margin-top:26px;display:none}
 .results.show{display:block}
-.results-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;margin-bottom:20px}
-.results-title{font-size:16px;font-weight:600}
+.results-head{margin-bottom:18px}
+.results-title{font-size:16px;font-weight:700}
 .results-sub{margin-top:3px;font-size:12px;color:var(--ink-faint)}
 
-.download-group{display:grid;grid-template-columns:repeat(auto-fit, minmax(160px, 1fr));gap:10px;margin-bottom:22px}
-.dl-btn{
-  border:1px solid var(--glass-border);background:var(--glass-fill);
-  color:var(--ink);padding:12px 16px;border-radius:var(--radius-md);font-size:12.5px;font-weight:600;
-  display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:.18s;text-align:center;
-}
-.dl-btn svg{width:15px;height:15px}
+.download-group{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:9px;margin-bottom:20px}
+.dl-btn{border:1px solid var(--glass-border);background:var(--glass-fill);color:var(--ink);padding:12px 14px;border-radius:var(--radius-md);font-size:12px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:7px;transition:.18s;text-align:center}
+.dl-btn svg{width:14px;height:14px;flex:0 0 auto}
 .dl-btn:hover{border-color:var(--glass-border-bright);background:var(--glass-fill-strong)}
-.dl-btn.primary{background:var(--cyan);color:#090d16;border-color:transparent;box-shadow:0 8px 20px rgba(0,210,255,0.3)}
-.dl-btn:disabled{opacity:.4;cursor:not-allowed}
+.dl-btn.primary{background:var(--cyan);color:#090d16;border-color:transparent;box-shadow:0 8px 20px rgba(0,210,255,.3)}
+.dl-btn:disabled{opacity:.35;cursor:not-allowed}
 
-.stat-strip{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:1px;
-  background:var(--glass-border);border:1px solid var(--glass-border);border-radius:var(--radius-md);overflow:hidden;margin-bottom:20px;
-}
-.stat{background:var(--glass-fill);padding:16px;text-align:center}
-.stat-num{font-size:22px;font-weight:700;font-family:var(--mono)}
-.stat-label{margin-top:4px;font-size:10px;color:var(--ink-faint);letter-spacing:.03em}
+.stat-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:1px;background:var(--glass-border);border:1px solid var(--glass-border);border-radius:var(--radius-md);overflow:hidden;margin-bottom:20px}
+.stat{background:var(--glass-fill);padding:14px;text-align:center}
+.stat-num{font-size:20px;font-weight:700;font-family:var(--mono)}
+.stat-label{margin-top:4px;font-size:9.5px;color:var(--ink-faint);letter-spacing:.03em}
 
-.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;max-height:380px;overflow-y:auto;padding-right:4px}
-.g-card{border:1px solid var(--glass-border);background:var(--glass-fill);border-radius:var(--radius-sm);padding:8px;transition:.15s}
-.g-card img{width:100%;height:100px;object-fit:cover;border-radius:6px;background:var(--glass-fill-strong)}
-.g-card button{width:100%;margin-top:6px;border:0;background:transparent;color:var(--ink-dim);font-size:11px;padding:6px 0;border-radius:4px}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:9px;max-height:360px;overflow-y:auto;padding-right:4px}
+.g-card{border:1px solid var(--glass-border);background:var(--glass-fill);border-radius:var(--radius-sm);padding:7px;transition:.15s}
+.g-card img{width:100%;height:92px;object-fit:cover;border-radius:8px;background:var(--glass-fill-strong)}
+.g-card button{width:100%;margin-top:6px;border:0;background:transparent;color:var(--ink-dim);font-size:10.5px;padding:6px 0;border-radius:6px}
 .g-card button:hover{background:var(--glass-fill-strong);color:var(--ink)}
 
-footer{padding:28px 0 45px;border-top:1px solid var(--glass-border);font-size:12px;color:var(--ink-faint);text-align:center}
-.hidden{display:none !important}
+.limits{margin:30px 0 50px;padding:20px 22px;display:flex;gap:14px;align-items:flex-start}
+.limits svg{width:19px;height:19px;flex:0 0 auto;color:var(--amber);margin-top:2px}
+.limits h3{font-size:13px;font-weight:700;margin-bottom:6px}
+.limits p{font-size:12px;color:var(--ink-dim);line-height:1.7;max-width:660px}
+
+footer{padding:26px 0 45px;border-top:1px solid var(--glass-border);font-size:11.5px;color:var(--ink-faint);text-align:center}
+.hidden{display:none!important}
+
+@media(max-width:480px){.wrap{width:min(100%,calc(100% - 28px))}.tool-inner{padding:18px}}
 </style>
 </head>
 <body>
@@ -285,7 +196,7 @@ footer{padding:28px 0 45px;border-top:1px solid var(--glass-border);font-size:12
     <div class="header-row">
       <div class="brand">
         <div class="brand-mark">SF</div>
-        <div class="brand-text">Siteforge<small>macOS Professional Edition</small></div>
+        <div class="brand-text">Siteforge<small>Multi-page site &amp; asset extractor</small></div>
       </div>
       <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" type="button">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41m12.02-12.02 1.41 1.41"/></svg>
@@ -294,12 +205,12 @@ footer{padding:28px 0 45px;border-top:1px solid var(--glass-border);font-size:12
   </header>
 
   <section class="hero">
-    <h1>Clone full websites &amp; assets in <span class="grad">stunning Mac glass style.</span></h1>
-    <p>Crawl complete multi-page domains, pull stylesheets, scripts, icons, fonts, and images into clean, ready-to-open bundles.</p>
+    <h1>Clone full websites &amp; assets in <span class="grad">clean, frosted glass style.</span></h1>
+    <p>Crawl multi-page sites and pull stylesheets, scripts, fonts, icons, documents, and images into a ready-to-open project — or grab just one page, and just one asset type, on their own.</p>
     <div class="hero-facts">
-      <div class="fact"><b>Multi-page</b> recursive domain crawl</div>
-      <div class="fact">Dedicated <b>Icons &amp; Assets</b> folders</div>
-      <div class="fact">Independent export actions</div>
+      <div class="fact"><b>Multi-page</b> same-site crawl</div>
+      <div class="fact">Images, icons, fonts &amp; PDFs <b>download separately</b></div>
+      <div class="fact">Runs <b>entirely in your browser</b></div>
     </div>
   </section>
 
@@ -311,63 +222,59 @@ footer{padding:28px 0 45px;border-top:1px solid var(--glass-border);font-size:12
         <button class="mode-btn" data-mode="file" type="button">Upload file</button>
       </div>
 
-      <!-- URL MODE -->
       <div class="mode-pane active" data-pane="url">
         <div class="field">
-          <label for="urlInput">Target Domain or URL</label>
+          <label for="urlInput">Page or site address</label>
           <input class="input" id="urlInput" type="url" placeholder="https://example.com" autocomplete="off">
         </div>
       </div>
 
-      <!-- PASTE MODE -->
       <div class="mode-pane" data-pane="paste">
         <div class="field">
-          <label for="baseUrlPaste">Site Base URL <span class="hint">— for relative link resolution</span></label>
+          <label for="baseUrlPaste">Site address <span class="hint">— used to resolve relative links and fetch its files</span></label>
           <input class="input" id="baseUrlPaste" type="url" placeholder="https://example.com">
         </div>
         <div class="field">
-          <label for="pasteInput">HTML Source Code</label>
-          <textarea class="textarea" id="pasteInput" placeholder="Paste HTML markup here..."></textarea>
+          <label for="pasteInput">HTML source</label>
+          <textarea class="textarea" id="pasteInput" placeholder="Paste the page's HTML source here..."></textarea>
         </div>
       </div>
 
-      <!-- FILE MODE -->
       <div class="mode-pane" data-pane="file">
         <div class="field">
-          <label for="baseUrlFile">Site Base URL <span class="hint">— optional</span></label>
+          <label for="baseUrlFile">Site address <span class="hint">— optional, only needed to fetch linked files</span></label>
           <input class="input" id="baseUrlFile" type="url" placeholder="https://example.com">
         </div>
         <input type="file" id="fileInput" accept=".html,.htm" class="hidden">
         <label class="dropzone" id="dropzone" for="fileInput">
           <div class="dz-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 0 0 4.56 21h14.88a2 2 0 0 0 1.939-1.515L22 17"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 15V4"></path><path d="m7 8 5-4 5 4"></path><path d="M4.5 15v3.2a1.8 1.8 0 0 0 1.8 1.8h11.4a1.8 1.8 0 0 0 1.8-1.8V15"></path></svg>
           </div>
           <div class="dz-title">Drop an .html file, or click to browse</div>
+          <div class="dz-copy">Read entirely on your device — nothing is uploaded.</div>
           <div class="dz-filename" id="fileNameLabel"></div>
         </label>
       </div>
 
-      <!-- ADVANCED OPTIONS -->
       <div class="check-row">
-        <input type="checkbox" id="multiPageToggle" checked>
-        <label for="multiPageToggle">Crawl multiple pages across this domain (recursive link discovery)</label>
+        <input type="checkbox" id="multiPageToggle">
+        <label for="multiPageToggle">Crawl the whole site <span class="hint">— follow same-site links and export every page found, not just this one</span></label>
       </div>
 
-      <div class="field" id="crawlLimitField">
+      <div class="field" id="crawlLimitField" style="display:none">
         <label for="maxPagesSelect">Maximum pages to crawl</label>
         <select class="select" id="maxPagesSelect">
-  <option value="10" selected>Up to 10 pages</option>
-  <option value="25">Up to 25 pages</option>
-  <option value="50">Up to 50 pages</option>
-  <option value="100">Up to 100 pages</option>
-    <option value="500">Up to 500 pages</option>
-
-</select>
-        
+          <option value="10">Up to 10 pages</option>
+          <option value="25" selected>Up to 25 pages</option>
+          <option value="50">Up to 50 pages</option>
+          <option value="100">Up to 100 pages</option>
+          <option value="200">Up to 200 pages</option>
+          <option value="500">Up to 500 pages</option>
+        </select>
       </div>
 
       <div class="field">
-        <label for="formatSelect">Image export format</label>
+        <label for="formatSelect">Image export format <span class="hint">— converted locally via canvas</span></label>
         <select class="select" id="formatSelect">
           <option value="original" selected>Keep original format</option>
           <option value="png">Convert all to PNG</option>
@@ -378,25 +285,28 @@ footer{padding:28px 0 45px;border-top:1px solid var(--glass-border);font-size:12
 
       <div class="check-row">
         <input type="checkbox" id="hdToggle" checked>
-        <label for="hdToggle">Recover full-resolution images (strip resize parameters)</label>
+        <label for="hdToggle">Recover full-resolution images (strip resize/crop/quality parameters)</label>
       </div>
-
       <div class="check-row">
         <input type="checkbox" id="proxyToggle" checked>
-        <label for="proxyToggle">Enable fallback CORS proxy (allorigins.win)</label>
+        <label for="proxyToggle">If a request is blocked, retry through a fallback proxy (allorigins.win)</label>
       </div>
-
       <div class="check-row">
         <input type="checkbox" id="fontsToggle" checked>
-        <label for="fontsToggle">Fetch fonts and background CSS assets</label>
+        <label for="fontsToggle">Fetch fonts and background images referenced inside stylesheets</label>
+      </div>
+      <div class="check-row">
+        <input type="checkbox" id="docsToggle" checked>
+        <label for="docsToggle">Fetch linked documents (PDF, DOC, XLS, ZIP…) as their own files</label>
       </div>
 
       <button class="primary-btn" id="runBtn" type="button">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-        <span id="runBtnLabel">Extract Full Project</span>
+        <span id="runBtnLabel">Extract project</span>
       </button>
 
-      <!-- LOG TERMINAL -->
+      <p class="disclaimer">Siteforge only reaches pages and files your browser is allowed to (CORS-permitted, or retried through the fallback proxy). Login-gated, paywalled, or bot-checked content stays out of reach. CSS and JS are inlined directly into each page's HTML — no loose .js/.css files — so nothing gets flagged by antivirus tools on extraction. This page also asks the browser to keep its inspector closed as a soft UI deterrent only, not real protection.</p>
+
       <div class="glass log-panel" id="logPanel">
         <div class="log-head">
           <div class="log-dots"><span class="d-red"></span><span class="d-amber"></span><span class="d-green"></span></div>
@@ -406,31 +316,36 @@ footer{padding:28px 0 45px;border-top:1px solid var(--glass-border);font-size:12
         <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
       </div>
 
-      <!-- RESULTS & INDEPENDENT DOWNLOAD BUTTONS -->
       <div class="results" id="results">
         <div class="results-head">
-          <div>
-            <div class="results-title">Extraction Complete</div>
-            <div class="results-sub" id="resultsSub">Select your preferred download option below.</div>
-          </div>
+          <div class="results-title">Project ready</div>
+          <div class="results-sub" id="resultsSub">Choose what to download — each type comes as its own ZIP, or grab everything together.</div>
         </div>
 
         <div class="download-group">
           <button class="dl-btn" id="dlImages" type="button">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-            Images Only (.zip)
+            Images (.zip)
+          </button>
+          <button class="dl-btn" id="dlFonts" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h16"/><path d="M6 16 10 4l4 12"/><path d="M7.5 12h5"/></svg>
+            Fonts &amp; CSS assets (.zip)
           </button>
           <button class="dl-btn" id="dlIcons" type="button">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m12 8-4 4 4 4m4-4H8"/></svg>
-            Icons Folder (.zip)
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m9 12 2 2 4-4"/></svg>
+            Icons (.zip)
+          </button>
+          <button class="dl-btn" id="dlDocs" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+            Documents (.zip)
           </button>
           <button class="dl-btn" id="dlSite" type="button">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M4 9h16"/></svg>
-            Site Pages (.zip)
+            Page(s) only (.zip)
           </button>
           <button class="dl-btn primary" id="dlAll" type="button">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v13m0 0-5-5m5 5 5-5M4 19h16"/></svg>
-            Full Project Bundle
+            Everything (.zip)
           </button>
         </div>
 
@@ -439,18 +354,25 @@ footer{padding:28px 0 45px;border-top:1px solid var(--glass-border);font-size:12
           <div class="stat"><div class="stat-num" id="statCss">0</div><div class="stat-label">STYLESHEETS</div></div>
           <div class="stat"><div class="stat-num" id="statJs">0</div><div class="stat-label">SCRIPTS</div></div>
           <div class="stat"><div class="stat-num" id="statImg">0</div><div class="stat-label">IMAGES</div></div>
+          <div class="stat"><div class="stat-num" id="statFonts">0</div><div class="stat-label">FONTS/CSS</div></div>
           <div class="stat"><div class="stat-num" id="statIcons">0</div><div class="stat-label">ICONS</div></div>
+          <div class="stat"><div class="stat-num" id="statDocs">0</div><div class="stat-label">DOCUMENTS</div></div>
         </div>
 
         <div class="gallery" id="gallery"></div>
       </div>
-
     </div>
   </section>
 
-  <footer>
-    Siteforge — macOS Professional Edition • Runs entirely in your browser
-  </footer>
+  <section class="limits glass">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+    <div>
+      <h3>Good to know</h3>
+      <p>Runs entirely client-side; nothing you enter leaves your browser except the fetch requests it makes, plus a request to allorigins.win when a file needs the fallback proxy. For a PHP site, only what PHP actually renders (HTML/CSS/JS/images) can ever reach the browser — the .php source itself never leaves the server, for any tool, anywhere. For a React/Vite/Webpack app, the real, working compiled bundle is captured, plus any sibling chunk files it references (a heuristic scan, not a guarantee) — but the original uncompiled .jsx source is only recoverable if the site ships a source map. Respect the terms of any site you extract from — this is for your own projects, backups and learning, not for republishing someone else's work as your own.</p>
+    </div>
+  </section>
+
+  <footer>Siteforge — runs entirely in your browser</footer>
 </div>
 
 <script>
@@ -459,14 +381,12 @@ let uploadedFileText = null;
 let uploadedFileName = "";
 let lastResult = null;
 
-// Theme toggle
 const root = document.documentElement;
 document.getElementById("themeToggle").addEventListener("click", () => {
   const isLight = root.getAttribute("data-theme") === "light";
   root.setAttribute("data-theme", isLight ? "dark" : "light");
 });
 
-// Mode switching
 document.querySelectorAll(".mode-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".mode-btn").forEach(b => b.classList.remove("active"));
@@ -478,10 +398,9 @@ document.querySelectorAll(".mode-btn").forEach(btn => {
 });
 
 document.getElementById("multiPageToggle").addEventListener("change", (e) => {
-  document.getElementById("crawlLimitField").classList.toggle("hidden", !e.target.checked);
+  document.getElementById("crawlLimitField").style.display = e.target.checked ? "block" : "none";
 });
 
-// File upload / drag-drop handlers
 const fileInput = document.getElementById("fileInput");
 const dropzone = document.getElementById("dropzone");
 const fileNameLabel = document.getElementById("fileNameLabel");
@@ -493,11 +412,9 @@ fileInput.addEventListener("change", async (e) => {
   fileNameLabel.textContent = "Loaded: " + file.name;
   uploadedFileText = await file.text();
 });
-
-dropzone.addEventListener("dragover", e => { e.preventDefault(); dropzone.classList.add("drag"); });
-dropzone.addEventListener("dragleave", () => dropzone.classList.remove("drag"));
+["dragover","dragenter"].forEach(evt=>dropzone.addEventListener(evt, e=>{e.preventDefault();dropzone.classList.add("drag");}));
+["dragleave","drop"].forEach(evt=>dropzone.addEventListener(evt, e=>{e.preventDefault();dropzone.classList.remove("drag");}));
 dropzone.addEventListener("drop", async e => {
-  e.preventDefault(); dropzone.classList.remove("drag");
   const file = e.dataTransfer.files[0];
   if(!file) return;
   uploadedFileName = file.name;
@@ -505,7 +422,6 @@ dropzone.addEventListener("drop", async e => {
   uploadedFileText = await file.text();
 });
 
-// Logger helpers
 const logPanel = document.getElementById("logPanel");
 const logBody = document.getElementById("logBody");
 const logStatus = document.getElementById("logStatus");
@@ -531,18 +447,13 @@ function normalizeUrl(v){
   if(!/^https?:\/\//i.test(v)) v = "https://" + v;
   return new URL(v).href;
 }
-
 function safeExt(mimeOrPath, fallback){
   let ext = fallback || "png";
-  if(mimeOrPath && mimeOrPath.includes("/")){
-    ext = mimeOrPath.split("/")[1].split(";")[0];
-  } else if(mimeOrPath && mimeOrPath.includes(".")){
-    ext = mimeOrPath.split(".").pop().split("?")[0];
-  }
+  if(mimeOrPath && mimeOrPath.includes("/")) ext = mimeOrPath.split("/")[1].split(";")[0];
+  else if(mimeOrPath && mimeOrPath.includes(".")) ext = mimeOrPath.split(".").pop().split("?")[0];
   if(ext === "jpeg") ext = "jpg";
   return ext.replace(/[^a-z0-9]/gi,"").slice(0,5) || "png";
 }
-
 function convertToHdUrl(urlString){
   try{
     const url = new URL(urlString);
@@ -551,10 +462,34 @@ function convertToHdUrl(urlString){
     return url.toString();
   }catch(e){ return urlString; }
 }
+function sanitizeBase64(data){
+  let clean = data.replace(/[\s\r\n]+/g,"");
+  while(clean.length % 4 !== 0) clean += "=";
+  return clean;
+}
+function filenameFromUrl(url, fallbackBase, fallbackExt){
+  try{
+    const u = new URL(url);
+    let base = u.pathname.split("/").filter(Boolean).pop() || (fallbackBase + "." + fallbackExt);
+    base = base.split("?")[0].split("#")[0];
+    base = base.replace(/[^a-zA-Z0-9._-]/g, "_");
+    if(!base.includes(".")) base += "." + fallbackExt;
+    return base.slice(0,120);
+  }catch(e){ return fallbackBase + "." + fallbackExt; }
+}
+function uniqueName(name, usedNames){
+  if(!usedNames.has(name)){ usedNames.add(name); return name; }
+  const dot = name.lastIndexOf(".");
+  const base = dot === -1 ? name : name.slice(0,dot);
+  const ext = dot === -1 ? "" : name.slice(dot);
+  let i = 2, candidate = base + "-" + i + ext;
+  while(usedNames.has(candidate)){ i++; candidate = base + "-" + i + ext; }
+  usedNames.add(candidate);
+  return candidate;
+}
 
 const PROXY_PREFIX = "https://api.allorigins.win/raw?url=";
 let useProxyFallback = true;
-
 async function smartFetch(url){
   try{
     const r = await fetch(url, { mode:"cors", redirect:"follow" });
@@ -575,43 +510,28 @@ function triggerSave(blob, filename){
   document.body.appendChild(a);
   a.click();
   a.remove();
-  setTimeout(() => URL.revokeObjectURL(a.href), 1500);
+  setTimeout(()=>URL.revokeObjectURL(a.href), 1500);
 }
 
-function filenameFromUrl(url, fallbackBase, fallbackExt){
-  try{
-    const u = new URL(url);
-    let base = u.pathname.split("/").filter(Boolean).pop() || (fallbackBase + "." + fallbackExt);
-    base = base.split("?")[0].split("#")[0];
-    base = base.replace(/[^a-zA-Z0-9._-]/g, "_");
-    if(!base.includes(".")) base += "." + fallbackExt;
-    return base.slice(0,120);
-  }catch(e){
-    return fallbackBase + "." + fallbackExt;
-  }
-}
-
-function uniqueName(name, usedNames){
-  if(!usedNames.has(name)){ usedNames.add(name); return name; }
-  const dot = name.lastIndexOf(".");
-  const base = dot === -1 ? name : name.slice(0,dot);
-  const ext = dot === -1 ? "" : name.slice(dot);
-  let i = 2, candidate = base + "-" + i + ext;
-  while(usedNames.has(candidate)){ i++; candidate = base + "-" + i + ext; }
-  usedNames.add(candidate);
-  return candidate;
-}
+/* soft devtools deterrent — not real security, see disclaimer */
+(function guardDevTools(){
+  document.addEventListener("contextmenu", e => e.preventDefault());
+  document.addEventListener("keydown", e => {
+    const k = e.key;
+    if(k === "F12"){ e.preventDefault(); return; }
+    if(e.ctrlKey && e.shiftKey && ["I","i","J","j","C","c"].includes(k)){ e.preventDefault(); return; }
+    if(e.ctrlKey && ["U","u"].includes(k)){ e.preventDefault(); return; }
+  });
+})();
 
 function convertImageBlob(blob, format){
   return new Promise(resolve=>{
     if(format === "original" || blob.type === "image/svg+xml" || blob.type === "image/gif"){
-      resolve({ blob, ext: safeExt(blob.type,"png") });
-      return;
+      resolve({ blob, ext: safeExt(blob.type,"png") }); return;
     }
     const mimeMap = { png:"image/png", jpg:"image/jpeg", webp:"image/webp" };
     const targetMime = mimeMap[format];
     if(!targetMime){ resolve({ blob, ext: safeExt(blob.type,"png") }); return; }
-
     const objectUrl = URL.createObjectURL(blob);
     const im = new Image();
     im.onload = () => {
@@ -624,83 +544,103 @@ function convertImageBlob(blob, format){
         ctx.drawImage(im,0,0);
         canvas.toBlob(newBlob=>{
           URL.revokeObjectURL(objectUrl);
-          if(newBlob) resolve({ blob:newBlob, ext:format });
-          else resolve({ blob, ext: safeExt(blob.type,"png") });
+          resolve(newBlob ? { blob:newBlob, ext:format } : { blob, ext: safeExt(blob.type,"png") });
         }, targetMime, 0.92);
-      }catch(e){
-        URL.revokeObjectURL(objectUrl);
-        resolve({ blob, ext: safeExt(blob.type,"png") });
-      }
+      }catch(e){ URL.revokeObjectURL(objectUrl); resolve({ blob, ext: safeExt(blob.type,"png") }); }
     };
     im.onerror = () => { URL.revokeObjectURL(objectUrl); resolve({ blob, ext: safeExt(blob.type,"png") }); };
     im.src = objectUrl;
   });
 }
 
+const FONT_EXT_RE = /\.(woff2?|ttf|otf|eot)(\?|#|$)/i;
+const IMG_EXT_RE = /\.(png|jpe?g|gif|webp|svg|avif)(\?|#|$)/i;
+const DOC_EXT_RE = /\.(pdf|docx?|xlsx?|pptx?|zip|rar|7z|csv|txt)(\?|#|$)/i;
+const NON_PAGE_EXT_RE = /\.(png|jpe?g|gif|webp|svg|avif|ico|mp4|mp3|wav|mov|avi|woff2?|ttf|otf|eot|css|js|json|xml|rss)(\?|#|$)/i;
+
 function discoverAssets(doc, baseUrl){
   const cssItems = [];
   const jsItems = [];
   const images = new Set();
   const icons = new Set();
+  const documents = new Set();
   const base64Images = new Set();
+  const pageLinks = new Set();
 
   doc.querySelectorAll('link[rel="stylesheet"][href]').forEach(el=>{
     try{ cssItems.push({ url:new URL(el.getAttribute("href"), baseUrl || location.href).href, el }); }catch(e){}
   });
-
   doc.querySelectorAll("script[src]").forEach(el=>{
     try{ jsItems.push({ url:new URL(el.getAttribute("src"), baseUrl || location.href).href, el }); }catch(e){}
   });
 
+  const attrs = ["src","data-src","data-full-src","data-original","srcset"];
   doc.querySelectorAll("img").forEach(el=>{
-    ["src","data-src","data-full-src","data-original"].forEach(attr=>{
+    attrs.forEach(attr=>{
       const raw = el.getAttribute(attr);
       if(!raw) return;
-      if(raw.startsWith("data:image/")){
-        if(raw.length > 50) base64Images.add(raw.replace(/\s+/g,""));
-        return;
-      }
-      try{
-        let resolved = raw.startsWith("//") ? "https:" + raw : new URL(raw, baseUrl || location.href).href;
-        images.add(resolved);
-      }catch(e){}
+      const candidates = attr === "srcset" ? raw.split(",").map(s=>s.trim().split(/\s+/)[0]) : [raw.trim()];
+      candidates.forEach(source=>{
+        if(!source) return;
+        if(source.startsWith("data:image/")){ if(source.length > 50) base64Images.add(source.replace(/\s+/g,"")); return; }
+        try{
+          const resolved = source.startsWith("//") ? "https:"+source : new URL(source, baseUrl || location.href).href;
+          images.add(resolved);
+        }catch(e){}
+      });
     });
   });
 
-  doc.querySelectorAll('link[rel*="icon"], link[rel*="apple-touch-icon"]').forEach(el=>{
-    const href = el.getAttribute("href");
-    if(!href) return;
-    try{
-      let resolved = href.startsWith("//") ? "https:" + href : new URL(href, baseUrl || location.href).href;
-      icons.add(resolved);
-    }catch(e){}
+  doc.querySelectorAll('[style*="background"]').forEach(el=>{
+    const m = (el.getAttribute("style")||"").match(/url\((['"]?)(.*?)\1\)/);
+    if(m && m[2] && !m[2].startsWith("data:")){
+      try{ images.add(new URL(m[2], baseUrl || location.href).href); }catch(e){}
+    }
   });
 
-  return { cssItems, jsItems, images:[...images], icons:[...icons], base64Images:[...base64Images] };
+  doc.querySelectorAll('link[rel*="icon"]').forEach(el=>{
+    const href = el.getAttribute("href");
+    if(!href) return;
+    try{ icons.add(href.startsWith("//") ? "https:"+href : new URL(href, baseUrl || location.href).href); }catch(e){}
+  });
+
+  if(baseUrl){
+    let origin = null;
+    try{ origin = new URL(baseUrl).origin; }catch(e){}
+    doc.querySelectorAll("a[href]").forEach(el=>{
+      const raw = el.getAttribute("href");
+      if(!raw || raw.startsWith("#") || raw.startsWith("mailto:") || raw.startsWith("tel:") || raw.startsWith("javascript:")) return;
+      try{
+        const abs = new URL(raw, baseUrl).href;
+        if(DOC_EXT_RE.test(abs)){ documents.add(abs); return; }
+        if(!origin) return;
+        const u = new URL(abs);
+        if(u.origin !== origin) return;
+        if(NON_PAGE_EXT_RE.test(u.pathname)) return;
+        pageLinks.add(u.origin + u.pathname + u.search);
+      }catch(e){}
+    });
+  }
+
+  return { cssItems, jsItems, images:[...images], icons:[...icons], documents:[...documents], base64Images:[...base64Images], pageLinks:[...pageLinks] };
 }
 
-const FONT_EXT_RE = /\.(woff2?|ttf|otf|eot)(\?|#|$)/i;
-async function extractCssAssets(cssText, cssFileUrl, usedNames){
+async function extractCssAssets(cssText, cssFileUrl, usedNames, rootPrefix){
   const urlRe = /url\(\s*(['"]?)([^'")]+)\1\s*\)/g;
   const found = new Map();
-  let match;
-  const matches = [];
+  let match; const matches = [];
   while((match = urlRe.exec(cssText)) !== null){
     const raw = match[2].trim();
     if(!raw || raw.startsWith("data:")) continue;
     matches.push(raw);
   }
-
   for(const raw of matches){
     let absolute;
-    try{ absolute = raw.startsWith("//") ? "https:"+raw : new URL(raw, cssFileUrl).href; }
-    catch(e){ continue; }
+    try{ absolute = raw.startsWith("//") ? "https:"+raw : new URL(raw, cssFileUrl).href; }catch(e){ continue; }
     if(found.has(absolute)) continue;
-
     const isFont = FONT_EXT_RE.test(absolute);
-    const isImg = /\.(png|jpe?g|gif|webp|svg|avif)(\?|#|$)/i.test(absolute);
+    const isImg = IMG_EXT_RE.test(absolute);
     if(!isFont && !isImg) continue;
-
     const { ok, response } = await smartFetch(absolute);
     if(!ok) continue;
     const blob = await response.blob();
@@ -708,12 +648,10 @@ async function extractCssAssets(cssText, cssFileUrl, usedNames){
     const name = uniqueName(filenameFromUrl(absolute, kind, isFont ? "woff2" : "png"), usedNames);
     found.set(absolute, { localPath: kind + "/" + name, blob, kind, name });
   }
-
   let updatedText = cssText;
   found.forEach((info, absolute)=>{
-    updatedText = updatedText.split(absolute).join("../" + info.localPath);
+    updatedText = updatedText.split(absolute).join(rootPrefix + "assets/" + info.localPath);
   });
-
   return { updatedText, assets:[...found.values()] };
 }
 
@@ -727,8 +665,26 @@ function findChunkReferences(jsText, scriptUrl){
   return [...found];
 }
 
+function pageFilePathFromUrl(url, isRoot){
+  if(isRoot) return "index.html";
+  try{
+    const u = new URL(url);
+    let path = u.pathname.replace(/^\/+/, "").replace(/\/+$/, "");
+    const segments = path.split("/").map(s=>s.replace(/[^a-zA-Z0-9._-]/g,"_")).filter(Boolean);
+    if(!segments.length) return "index.html";
+    const last = segments[segments.length-1];
+    segments[segments.length-1] = last.includes(".") ? last.replace(/\.[a-zA-Z0-9]+$/, ".html") : last;
+    if(!segments[segments.length-1].endsWith(".html")) segments.push("index.html");
+    return segments.join("/");
+  }catch(e){ return null; }
+}
+function rootPrefixFor(pageFilePath){
+  const depth = pageFilePath.split("/").length - 1;
+  return depth > 0 ? "../".repeat(depth) : "";
+}
+
 /* =========================================================
-   MAIN PIPELINE WITH PRECISE MULTI-PAGE CRAWLING
+   MAIN PIPELINE
 ========================================================= */
 
 async function runPipeline(){
@@ -736,127 +692,142 @@ async function runPipeline(){
   const hdToggle = document.getElementById("hdToggle").checked;
   useProxyFallback = document.getElementById("proxyToggle").checked;
   const multiPage = document.getElementById("multiPageToggle").checked;
-  const maxPages = parseInt(document.getElementById("maxPagesSelect").value, 10);
+  const maxPages = parseInt(document.getElementById("maxPagesSelect").value, 10) || 10;
   const fetchFontsToggle = document.getElementById("fontsToggle").checked;
+  const fetchDocsToggle = document.getElementById("docsToggle").checked;
   const exportFormat = document.getElementById("formatSelect").value;
 
   let startUrl = "";
-  let rawHtml = "";
+  let pastedHtml = "";
 
   if(currentMode === "url"){
     const val = document.getElementById("urlInput").value.trim();
-    if(!val){ alert("Enter a valid URL first."); return; }
-    try{ startUrl = normalizeUrl(val); }catch(e){ alert("Invalid URL format."); return; }
+    if(!val){ alert("Enter a URL first."); return; }
+    try{ startUrl = normalizeUrl(val); }catch(e){ alert("That doesn't look like a valid URL."); return; }
   } else if(currentMode === "paste"){
-    rawHtml = document.getElementById("pasteInput").value;
+    pastedHtml = document.getElementById("pasteInput").value;
+    if(!pastedHtml.trim()){ alert("Paste some HTML first."); return; }
     const bv = document.getElementById("baseUrlPaste").value.trim();
-    if(!rawHtml.trim()){ alert("Paste HTML source first."); return; }
     if(bv){ try{ startUrl = normalizeUrl(bv); }catch(e){} }
   } else if(currentMode === "file"){
-    if(!uploadedFileText){ alert("Select an HTML file first."); return; }
-    rawHtml = uploadedFileText;
+    if(!uploadedFileText){ alert("Choose an .html file first."); return; }
+    pastedHtml = uploadedFileText;
     const bv = document.getElementById("baseUrlFile").value.trim();
     if(bv){ try{ startUrl = normalizeUrl(bv); }catch(e){} }
   }
 
   runBtn.disabled = true;
-  document.getElementById("runBtnLabel").textContent = "Processing Site...";
+  document.getElementById("runBtnLabel").textContent = "Working…";
   document.getElementById("results").classList.remove("show");
   resetLog();
-  setProgress(10);
+  setProgress(5);
 
-  let pagesQueueData = []; // Holds { filename, url } to fetch
-  const visitedUrls = new Set();
-  const domainHost = startUrl ? new URL(startUrl).hostname : "";
-
-  // 1. Setup Root Page (index.html)
+  // fetch (or use) the root page's HTML — this always happens, single-page or not
+  let rootHtml = "";
   if(currentMode === "url"){
-    visitedUrls.add(startUrl);
-    pagesQueueData.push({ filename: "index.html", url: startUrl });
-  } else {
-    pagesQueueData.push({ filename: "index.html", url: startUrl || "index.html" });
-  }
-
-  setProgress(20);
-
-  // 2. Discover sub-pages first from index.html if URL mode is active
-  if(multiPage && startUrl && currentMode === "url"){
-    log("Scanning root page for internal links...");
-    const res = await smartFetch(startUrl);
-    if(res.ok){
-      const rootText = await res.response.text();
-      const rootDoc = new DOMParser().parseFromString(rootText, "text/html");
-      
-      rootDoc.querySelectorAll("a[href]").forEach(a => {
-        try{
-          let absLink = new URL(a.getAttribute("href"), startUrl).href;
-          let linkObj = new URL(absLink);
-          
-          if(linkObj.hostname === domainHost && !visitedUrls.has(absLink) && !absLink.includes("#") && !absLink.match(/\.(pdf|zip|png|jpg|jpeg|webp)$/i)){
-            if(pagesQueueData.length < maxPages){
-              visitedUrls.add(absLink);
-              let pathName = linkObj.pathname.replace(/^\/|\/$/g, "");
-              if(!pathName) return; // already index.html
-              
-              if(!pathName.endsWith(".html")) {
-                pathName = pathName.replace(/[^a-zA-Z0-9]/g, "-") + ".html";
-              }
-              pagesQueueData.push({ filename: pathName, url: absLink });
-              log("Queued sub-page: " + pathName + " (" + absLink + ")", "log-ok");
-            }
-          }
-        }catch(e){}
-      });
+    log("Requesting " + startUrl);
+    const { ok, response, viaProxy } = await smartFetch(startUrl);
+    if(!ok){
+      log("The page could not be reached directly or through the fallback proxy.", "log-err");
+      logStatus.textContent = "FAILED"; setProgress(0);
+      runBtn.disabled = false; document.getElementById("runBtnLabel").textContent = "Extract project";
+      alert("Couldn't retrieve this page — nothing was downloaded.");
+      return;
     }
+    rootHtml = await response.text();
+    log(viaProxy ? "Direct request was blocked — retrieved via fallback proxy instead." : "Page received.", "log-ok");
+  } else {
+    rootHtml = pastedHtml;
+    log("Reading provided HTML (" + rootHtml.length.toLocaleString() + " characters).");
   }
 
-  setProgress(40);
-  log("Fetching " + pagesQueueData.length + " page(s) and their respective assets...");
+  const rootBodyText = new DOMParser().parseFromString(rootHtml,"text/html").body;
+  const rootTextLen = (rootBodyText ? rootBodyText.textContent.trim().replace(/\s+/g,"") : "").length;
+  if(rootTextLen < 5 && !/<(img|script|link)/i.test(rootHtml)){
+    log("This document has no visible text and nothing to extract.", "log-err");
+    logStatus.textContent = "FAILED"; setProgress(0);
+    runBtn.disabled = false; document.getElementById("runBtnLabel").textContent = "Extract project";
+    alert("There's nothing here to extract — nothing was downloaded.");
+    return;
+  }
 
-  const allImagesSet = new Set();
-  const allIconsSet = new Set();
-  const base64ImagesSet = new Set();
-  let totalCssCount = 0;
-  let totalJsCount = 0;
-  
-  const processedPages = [];
-  const usedNames = new Set(["index.html","README.txt"]);
+  setProgress(15);
+
+  // build the crawl queue
+  const domainHost = startUrl ? (()=>{ try{ return new URL(startUrl).hostname; }catch(e){ return ""; } })() : "";
+  const pagesQueue = [{ url: startUrl || "", html: rootHtml, filePath: "index.html", isRoot: true }];
+  const visited = new Set([startUrl]);
+
+  if(multiPage && startUrl && currentMode === "url"){
+    log("Scanning root page for same-site links…");
+    const rootDoc = new DOMParser().parseFromString(rootHtml, "text/html");
+    const { pageLinks } = discoverAssets(rootDoc, startUrl);
+    for(const link of pageLinks){
+      if(pagesQueue.length >= maxPages) break;
+      if(visited.has(link)) continue;
+      visited.add(link);
+      const fp = pageFilePathFromUrl(link, false);
+      if(!fp) continue;
+      pagesQueue.push({ url: link, html: null, filePath: fp, isRoot: false });
+    }
+    log("Queued " + pagesQueue.length + " page(s) to crawl (limit " + maxPages + ").", "log-ok");
+  }
+
+  setProgress(22);
+
+  const usedGlobalNames = new Set(["README.txt"]);
   const fontAndCssAssets = [];
+  const images = [];
+  const imgUsedNames = new Set();
+  const icons = [];
+  const iconUsedNames = new Set();
+  const documents = [];
+  const docUsedNames = new Set();
+  const seenImageUrls = new Set();
+  const seenIconUrls = new Set();
+  const seenDocUrls = new Set();
 
-  // 3. Fetch and process each page distinctly
-  for(let pageInfo of pagesQueueData){
-    log("Fetching page: " + pageInfo.filename);
-    let pageHtml = "";
-    
-    if(currentMode === "url" && pageInfo.url !== startUrl){
-      const subRes = await smartFetch(pageInfo.url);
-      if(subRes.ok){
-        pageHtml = await subRes.response.text();
-      } else {
-        log("Could not fetch " + pageInfo.url, "log-warn");
-        continue;
-      }
-    } else {
-      pageHtml = rawHtml;
+  let totalCss = 0, totalJs = 0, totalChunks = 0;
+  const processedPages = [];
+
+  for(let i=0; i<pagesQueue.length; i++){
+    const pageInfo = pagesQueue[i];
+    let pageHtml = pageInfo.html;
+
+    if(pageHtml === null){
+      log("Fetching page " + (i+1) + "/" + pagesQueue.length + ": " + pageInfo.url);
+      const { ok, response } = await smartFetch(pageInfo.url);
+      if(!ok){ log("Could not fetch " + pageInfo.url + " — skipped.", "log-warn"); continue; }
+      pageHtml = await response.text();
     }
 
     const doc = new DOMParser().parseFromString(pageHtml, "text/html");
-    const pageBase = pageInfo.url || startUrl || location.href;
-    const discovered = discoverAssets(doc, pageBase);
+    const pageBaseUrl = pageInfo.url || startUrl || "";
+    const { cssItems, jsItems, images: imgUrls, icons: iconUrls, documents: docUrls, base64Images, pageLinks } = discoverAssets(doc, pageBaseUrl);
+    const prefix = rootPrefixFor(pageInfo.filePath);
 
-    totalCssCount += discovered.cssItems.length;
-    totalJsCount += discovered.jsItems.length;
-    discovered.images.forEach(i => allImagesSet.add(hdToggle ? convertToHdUrl(i) : i));
-    discovered.icons.forEach(i => allIconsSet.add(i));
-    discovered.base64Images.forEach(b => base64ImagesSet.add(b));
+    // discover further same-site pages while crawling (breadth-first)
+    if(multiPage && currentMode === "url"){
+      for(const link of pageLinks){
+        if(pagesQueue.length >= maxPages) break;
+        if(visited.has(link)) continue;
+        visited.add(link);
+        const fp = pageFilePathFromUrl(link, false);
+        if(!fp) continue;
+        pagesQueue.push({ url: link, html: null, filePath: fp, isRoot: false });
+      }
+    }
 
-    // Inline CSS
-    for(const item of discovered.cssItems.slice(0,30)){
+    totalCss += cssItems.length;
+    totalJs += jsItems.length;
+
+    // CSS — inline into <style>
+    for(const item of cssItems.slice(0,40)){
       const { ok, response } = await smartFetch(item.url);
       if(ok){
         let text = await response.text();
         if(fetchFontsToggle){
-          const { updatedText, assets } = await extractCssAssets(text, item.url, usedNames);
+          const { updatedText, assets } = await extractCssAssets(text, item.url, usedGlobalNames, prefix);
           text = updatedText;
           fontAndCssAssets.push(...assets);
         }
@@ -866,8 +837,8 @@ async function runPipeline(){
       }
     }
 
-    // Inline JS & Chunks
-    for(const item of discovered.jsItems.slice(0,30)){
+    // JS — inline into <script>, chase bundler chunks
+    for(const item of jsItems.slice(0,40)){
       const { ok, response } = await smartFetch(item.url);
       if(ok){
         const text = await response.text();
@@ -876,13 +847,15 @@ async function runPipeline(){
         scriptEl.textContent = text.replace(/<\/(script)/gi, "<\\/$1");
         item.el.replaceWith(scriptEl);
 
-        const chunkUrls = findChunkReferences(text, item.url);
-        for(const chunkUrl of chunkUrls.slice(0,6)){
+        const chunkUrls = findChunkReferences(text, item.url).slice(0,10);
+        for(const chunkUrl of chunkUrls){
           const chunkRes = await smartFetch(chunkUrl);
           if(chunkRes.ok){
             const chunkText = await chunkRes.response.text();
+            totalChunks++;
             const isCss = /\.css(\?|$)/i.test(chunkUrl);
             const chunkEl = doc.createElement(isCss ? "style" : "script");
+            chunkEl.setAttribute("data-discovered-chunk","true");
             chunkEl.textContent = chunkText.replace(/<\/(style|script)/gi, "<\\/$1");
             scriptEl.after(chunkEl);
           }
@@ -890,78 +863,151 @@ async function runPipeline(){
       }
     }
 
-    processedPages.push({ filename: pageInfo.filename, html: "<!DOCTYPE html>\n" + doc.documentElement.outerHTML });
-  }
-
-  setProgress(75);
-  log("Downloading images and icons...");
-
-  // Fetch Images
-  const images = [];
-  const imgUsedNames = new Set();
-  let imgIdx = 0;
-  for(const url of allImagesSet){
-    imgIdx++;
-    const { ok, response } = await smartFetch(url);
-    if(ok){
-      const rawBlob = await response.blob();
-      const { blob, ext } = await convertImageBlob(rawBlob, exportFormat);
-      const name = uniqueName(filenameFromUrl(url, "image_" + imgIdx, ext), imgUsedNames);
-      images.push({ name, blob, previewUrl: URL.createObjectURL(blob) });
+    // images referenced on this page (deduped globally, path relative to this page's depth)
+    const imgEls = [...doc.querySelectorAll("img")];
+    for(const url0 of imgUrls){
+      const url = hdToggle ? convertToHdUrl(url0) : url0;
+      if(!seenImageUrls.has(url)){
+        seenImageUrls.add(url);
+        const { ok, response } = await smartFetch(url);
+        if(ok){
+          const rawBlob = await response.blob();
+          const { blob, ext } = await convertImageBlob(rawBlob, exportFormat);
+          const name = uniqueName(filenameFromUrl(url, "image_" + (images.length+1), ext), imgUsedNames);
+          images.push({ name, blob, url, previewUrl: URL.createObjectURL(blob) });
+        }
+      }
     }
-  }
+    const imageByUrl = new Map(images.map(im=>[im.url, im.name]));
+    imgEls.forEach(el=>{
+      const raw = el.getAttribute("src");
+      if(!raw || raw.startsWith("data:")) return;
+      try{
+        let resolved = raw.startsWith("//") ? "https:"+raw : new URL(raw, pageBaseUrl).href;
+        if(hdToggle) resolved = convertToHdUrl(resolved);
+        const name = imageByUrl.get(resolved);
+        if(name) el.setAttribute("src", prefix + "assets/images/" + name);
+      }catch(e){}
+    });
 
-  // Fetch Icons
-  const icons = [];
-  const iconUsedNames = new Set();
-  let iconIdx = 0;
-  for(const url of allIconsSet){
-    iconIdx++;
-    const { ok, response } = await smartFetch(url);
-    if(ok){
-      const blob = await response.blob();
-      const ext = safeExt(blob.type, "ico");
-      const name = uniqueName(filenameFromUrl(url, "icon_" + iconIdx, ext), iconUsedNames);
-      icons.push({ name, blob });
+    base64Images.forEach(data=>{
+      try{
+        const mime = data.match(/^data:(image\/[a-zA-Z0-9.+-]+);base64,/)[1];
+        const ext = safeExt(mime,"png");
+        const bytes = Uint8Array.from(atob(sanitizeBase64(data.split(",")[1])), c=>c.charCodeAt(0));
+        const blob = new Blob([bytes], { type: mime });
+        const name = uniqueName("embedded_" + (images.length+1) + "." + ext, imgUsedNames);
+        images.push({ name, blob, url:null, previewUrl: URL.createObjectURL(blob) });
+      }catch(e){}
+    });
+
+    // icons
+    const iconEls = [...doc.querySelectorAll('link[rel*="icon"]')];
+    for(const url of iconUrls){
+      if(!seenIconUrls.has(url)){
+        seenIconUrls.add(url);
+        const { ok, response } = await smartFetch(url);
+        if(ok){
+          const blob = await response.blob();
+          const name = uniqueName(filenameFromUrl(url, "icon_" + (icons.length+1), safeExt(blob.type,"ico")), iconUsedNames);
+          icons.push({ name, blob, url });
+        }
+      }
     }
+    const iconByUrl = new Map(icons.map(ic=>[ic.url, ic.name]));
+    iconEls.forEach(el=>{
+      const raw = el.getAttribute("href");
+      if(!raw) return;
+      try{
+        const resolved = raw.startsWith("//") ? "https:"+raw : new URL(raw, pageBaseUrl).href;
+        const name = iconByUrl.get(resolved);
+        if(name) el.setAttribute("href", prefix + "assets/icons/" + name);
+      }catch(e){}
+    });
+
+    // documents (pdf/doc/xls/zip…)
+    if(fetchDocsToggle){
+      for(const url of docUrls){
+        if(!seenDocUrls.has(url)){
+          seenDocUrls.add(url);
+          const { ok, response } = await smartFetch(url);
+          if(ok){
+            const blob = await response.blob();
+            const name = uniqueName(filenameFromUrl(url, "document_" + (documents.length+1), "pdf"), docUsedNames);
+            documents.push({ name, blob, url });
+          }
+        }
+      }
+      const docByUrl = new Map(documents.map(d=>[d.url, d.name]));
+      doc.querySelectorAll("a[href]").forEach(el=>{
+        const raw = el.getAttribute("href");
+        if(!raw) return;
+        try{
+          const resolved = new URL(raw, pageBaseUrl).href;
+          const name = docByUrl.get(resolved);
+          if(name) el.setAttribute("href", prefix + "assets/documents/" + name);
+        }catch(e){}
+      });
+    }
+
+    processedPages.push({ filePath: pageInfo.filePath, doc, url: pageInfo.url });
+    setProgress(22 + Math.round(((i+1)/pagesQueue.length) * 60));
   }
 
-  const readme = "SITEFORGE PROJECT BUNDLE\n==========================\nSource: " + (startUrl || uploadedFileName) + "\nGenerated: " + new Date().toISOString() + "\n";
+  // second pass: rewrite same-site page links to point at local crawled files
+  const urlToFilePath = new Map(processedPages.map(p=>[p.url, p.filePath]));
+  processedPages.forEach(p=>{
+    p.doc.querySelectorAll("a[href]").forEach(el=>{
+      const raw = el.getAttribute("href");
+      if(!raw || raw.startsWith("#") || el.getAttribute("href").startsWith(rootPrefixFor(p.filePath)+"assets/")) return;
+      try{
+        const abs = new URL(raw, p.url || startUrl || location.href).href;
+        const normalized = new URL(abs).origin + new URL(abs).pathname + new URL(abs).search;
+        if(urlToFilePath.has(normalized) && urlToFilePath.get(normalized) !== undefined){
+          el.setAttribute("href", rootPrefixFor(p.filePath) + urlToFilePath.get(normalized));
+        }
+      }catch(e){}
+    });
+  });
 
-  lastResult = {
-    pages: processedPages,
-    fontAndCssAssets,
-    readme,
-    images,
-    icons
-  };
+  const pages = processedPages.map(p => ({ filePath: p.filePath, html: "<!DOCTYPE html>\n" + p.doc.documentElement.outerHTML }));
 
-  document.getElementById("statPages").textContent = processedPages.length;
-  document.getElementById("statCss").textContent = totalCssCount;
-  document.getElementById("statJs").textContent = totalJsCount;
+  log("Fetched " + images.length + " image(s), " + icons.length + " icon(s), " + documents.length + " document(s), " + fontAndCssAssets.length + " font/CSS asset(s).", "log-ok");
+  if(totalChunks) log(totalChunks + " additional bundler chunk file(s) discovered and inlined.", "log-ok");
+
+  document.getElementById("statPages").textContent = pages.length;
+  document.getElementById("statCss").textContent = totalCss;
+  document.getElementById("statJs").textContent = totalJs;
   document.getElementById("statImg").textContent = images.length;
+  document.getElementById("statFonts").textContent = fontAndCssAssets.length;
   document.getElementById("statIcons").textContent = icons.length;
+  document.getElementById("statDocs").textContent = documents.length;
 
-  renderGallery(images);
+  const readme = "SITEFORGE PROJECT\n===================\n\nSource: " + (startUrl || uploadedFileName || "pasted HTML") + "\nGenerated: " + new Date().toISOString() + "\nPages: " + pages.length + "\nMulti-page crawl: " + (multiPage ? "enabled (limit " + maxPages + ")" : "disabled — single page only") + "\nFallback proxy: " + (useProxyFallback ? "enabled" : "disabled") + "\nImage format: " + exportFormat + "\n\nOpen index.html in a browser. CSS and JS are inlined directly into each page's HTML — no\nloose .js/.css files, so nothing gets flagged by antivirus tools on extraction.\n\nassets/images/      - images used across the crawled page(s)\nassets/icons/       - favicons / touch icons\nassets/documents/   - linked PDFs, Office files, archives\nassets/fonts/       - fonts referenced inside fetched stylesheets\nassets/css-assets/  - background images referenced inside fetched stylesheets\n\nAny stylesheet or script that couldn't be fetched was left as its original external tag\npointing at its absolute URL, so it still works when opened with an internet connection —\nthis matters for CDN-hosted libraries like GSAP.\n\nFor a PHP site: only what PHP renders (HTML/CSS/JS/images) can ever be captured — the .php\nsource never reaches the browser. For a React/Vite/Webpack app: the compiled bundle is\ncaptured along with chunk files it references (a heuristic, not a guarantee) — the original\nuncompiled source is only recoverable if a source map is shipped.\n\nThis project was generated client-side by Siteforge.\n";
+
+  lastResult = { pages, images, icons, documents, fontAndCssAssets, readme };
 
   setProgress(100);
   logStatus.textContent = "DONE";
-  log("Extraction complete successfully!", "log-ok");
+  log("Project ready.", "log-ok");
+  document.getElementById("resultsSub").textContent = pages.length + " page(s), " + images.length + " image(s), " + icons.length + " icon(s), " + documents.length + " document(s) ready to download.";
+  renderGallery(images);
   document.getElementById("results").classList.add("show");
 
   runBtn.disabled = false;
-  document.getElementById("runBtnLabel").textContent = "Extract Full Project";
+  document.getElementById("runBtnLabel").textContent = "Extract project";
 }
 
 function renderGallery(images){
   const gallery = document.getElementById("gallery");
   gallery.innerHTML = "";
-  images.slice(0, 16).forEach(img=>{
+  images.forEach(img=>{
     const card = document.createElement("div");
     card.className = "g-card";
     const im = document.createElement("img");
     im.src = img.previewUrl;
     im.loading = "lazy";
+    im.alt = img.name;
     const btn = document.createElement("button");
     btn.type = "button";
     btn.textContent = "Download";
@@ -973,56 +1019,66 @@ function renderGallery(images){
 }
 
 /* =========================================================
-   ZIP EXPORT HANDLERS
+   ZIP EXPORTS — each asset type stands alone or combines
 ========================================================= */
 
-async function buildZip(includePages, includeImages, includeIcons){
+async function buildZip(opts){
   if(!lastResult) return null;
   const zip = new JSZip();
-
-  if(includePages){
-    lastResult.pages.forEach(p => zip.file(p.filename, p.html));
+  if(opts.pages){
+    lastResult.pages.forEach(p => zip.file(p.filePath, p.html));
     zip.file("README.txt", lastResult.readme);
-    if(lastResult.fontAndCssAssets.length){
-      lastResult.fontAndCssAssets.forEach(a => zip.folder("assets/" + a.kind).file(a.name, a.blob));
-    }
   }
-  if(includeImages && lastResult.images.length){
-    const folder = includePages ? zip.folder("assets/images") : zip.folder("images");
-    lastResult.images.forEach(img => folder.file(img.name, img.blob));
+  if(opts.images && lastResult.images.length){
+    const f = opts.pages ? zip.folder("assets/images") : zip.folder("images");
+    lastResult.images.forEach(img => f.file(img.name, img.blob));
   }
-  if(includeIcons && lastResult.icons.length){
-    const folder = includePages ? zip.folder("assets/icons") : zip.folder("icons");
-    lastResult.icons.forEach(icon => folder.file(icon.name, icon.blob));
+  if(opts.icons && lastResult.icons.length){
+    const f = opts.pages ? zip.folder("assets/icons") : zip.folder("icons");
+    lastResult.icons.forEach(ic => f.file(ic.name, ic.blob));
+  }
+  if(opts.documents && lastResult.documents.length){
+    const f = opts.pages ? zip.folder("assets/documents") : zip.folder("documents");
+    lastResult.documents.forEach(d => f.file(d.name, d.blob));
+  }
+  if(opts.fonts && lastResult.fontAndCssAssets.length){
+    lastResult.fontAndCssAssets.forEach(a => zip.folder(opts.pages ? "assets/"+a.kind : a.kind).file(a.name, a.blob));
   }
   return await zip.generateAsync({ type:"blob", compression:"DEFLATE" });
 }
 
+function guardEmpty(list, label){
+  if(!lastResult || !list.length){ alert("No " + label + " were found for this project."); return true; }
+  return false;
+}
+
 document.getElementById("dlImages").addEventListener("click", async ()=>{
-  if(!lastResult || !lastResult.images.length){ alert("No images found."); return; }
-  const blob = await buildZip(false, true, false);
-  triggerSave(blob, "siteforge-images.zip");
+  if(guardEmpty(lastResult ? lastResult.images : [], "images")) return;
+  triggerSave(await buildZip({ images:true }), "siteforge-images.zip");
 });
-
+document.getElementById("dlFonts").addEventListener("click", async ()=>{
+  if(guardEmpty(lastResult ? lastResult.fontAndCssAssets : [], "fonts or CSS assets")) return;
+  triggerSave(await buildZip({ fonts:true }), "siteforge-fonts.zip");
+});
 document.getElementById("dlIcons").addEventListener("click", async ()=>{
-  if(!lastResult || !lastResult.icons.length){ alert("No icons found."); return; }
-  const blob = await buildZip(false, false, true);
-  triggerSave(blob, "siteforge-icons.zip");
+  if(guardEmpty(lastResult ? lastResult.icons : [], "icons")) return;
+  triggerSave(await buildZip({ icons:true }), "siteforge-icons.zip");
 });
-
+document.getElementById("dlDocs").addEventListener("click", async ()=>{
+  if(guardEmpty(lastResult ? lastResult.documents : [], "documents")) return;
+  triggerSave(await buildZip({ documents:true }), "siteforge-documents.zip");
+});
 document.getElementById("dlSite").addEventListener("click", async ()=>{
   if(!lastResult){ alert("Run extraction first."); return; }
-  const blob = await buildZip(true, false, false);
-  triggerSave(blob, "siteforge-pages.zip");
+  triggerSave(await buildZip({ pages:true }), "siteforge-pages.zip");
 });
-
 document.getElementById("dlAll").addEventListener("click", async ()=>{
   if(!lastResult){ alert("Run extraction first."); return; }
-  const blob = await buildZip(true, true, true);
-  triggerSave(blob, "siteforge-full-project.zip");
+  triggerSave(await buildZip({ pages:true, images:true, icons:true, documents:true, fonts:true }), "siteforge-project.zip");
 });
 
 document.getElementById("runBtn").addEventListener("click", runPipeline);
+document.getElementById("urlInput").addEventListener("keydown", e=>{ if(e.key === "Enter") runPipeline(); });
 </script>
 </body>
 </html>
